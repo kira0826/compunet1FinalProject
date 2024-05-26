@@ -1,0 +1,30 @@
+{
+  "name": "tw-commerce",
+  "version": "1.0.0",
+  "description": "ecommerce base on tailwind css",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "npx tailwindcss -i ./src/main.css -o ./public/assets/css/main.css -w",
+    "build": "webpack --mode production",
+    "dev": "webpack --mode development"
+
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@tailwindcss/forms": "0.5.0",
+    "autoprefixer": "^10.4.19",
+    "css-loader": "^7.1.2",
+    "postcss-loader": "^8.1.1",
+    "style-loader": "^4.0.0",
+    "tailwindcss": "^3.0.23",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "6.0.0",
+    "flowbite": "1.6.5"
+  }
+}
