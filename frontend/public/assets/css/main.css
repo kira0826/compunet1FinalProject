@@ -49,7 +49,7 @@ html {
 
 /*
 1. Remove the margin in all browsers.
-2. Inherit line-height from `html` so users can set them as a class directly on the `html` element.
+2. Inherit line-height from `html` so users can set them as a className directly on the `html` element.
 */
 
 body {
@@ -84,7 +84,7 @@ abbr:where([title]) {
 }
 
 /*
-Remove the default font size and weight for headings.
+Remove the default font size and weight htmlFor headings.
 */
 
 h1,
@@ -98,7 +98,7 @@ h6 {
 }
 
 /*
-Reset links to optimize for opt-in styling instead of opt-out.
+Reset links to optimize htmlFor opt-in styling instead of opt-out.
 */
 
 a {
@@ -225,7 +225,7 @@ button,
 }
 
 /*
-Use the modern Firefox focus style for all focusable elements.
+Use the modern Firefox focus style htmlFor all focusable elements.
 */
 
 :-moz-focusring {
@@ -298,7 +298,7 @@ summary {
 }
 
 /*
-Removes the default spacing and border for appropriate elements.
+Removes the default spacing and border htmlFor appropriate elements.
 */
 
 blockquote,
@@ -370,7 +370,7 @@ textarea::placeholder {
 }
 
 /*
-Set the default cursor for buttons.
+Set the default cursor htmlFor buttons.
 */
 
 button,
