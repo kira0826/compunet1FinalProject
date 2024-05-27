@@ -1,0 +1,5 @@
+{
+  "app.port": "18900",
+  "app.url": "http://localhost:",
+  "app.api": "http://localhost:18900"
+}
