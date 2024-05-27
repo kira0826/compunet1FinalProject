@@ -5,3 +5,5 @@ yarn-error.log
 /.idea
 /.vscode
 frontend/distribution
+frontend/package-lock.json
+backend/package-lock.json
