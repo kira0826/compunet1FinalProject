@@ -9,10 +9,10 @@ import {
   Profile,
   ProductInfo,
   Layout,
+  ProductForm
 } from "./pages/index.js";
 
 import "./components/fontAwesome.js";
-import { Product } from "./components/index.js";
 
 
 function App() {
@@ -35,6 +35,7 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/product" element={<ProductInfo incrementCartCount={incrementCartCount}/>} />
+          <Route path="/productForm" element={<ProductForm incrementCartCount={incrementCartCount}/>} />
         </Routes>
       </Layout>
     </Router>
