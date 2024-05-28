@@ -5,11 +5,11 @@ import config from "../config.json";
 function Home({ incrementCartCount }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+ 
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        console.log(config["app.api"]);
         const response = await fetch(config["app.api"] + "/products",{
           method: "GET",
           headers: {
@@ -43,6 +43,8 @@ function Home({ incrementCartCount }) {
                 key={product.id}
                 product={product}
                 incrementCartCount={incrementCartCount}
+
+
               />
             ))
           )}

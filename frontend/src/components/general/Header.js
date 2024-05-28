@@ -5,12 +5,10 @@ import { Link } from 'react-router-dom';
 
 function Header({carCount}) {
 
-  console.log(Number(carCount))
-
   return (
     <header className="py-4 shadow-sm bg-white">
       <div className="container flex items-center justify-between">
-        <Link to="/">
+        <Link to="/products">
           <img src="assets/images/logo.svg" alt="Logo" className="w-32" />
         </Link>
 
@@ -25,6 +23,8 @@ function Header({carCount}) {
             className="w-full border border-primary border-r-0 pl-12 py-3 pr-3 rounded-l-md focus:outline-none hidden md:flex"
             placeholder="search"
           />
+
+          
           <button className="bg-primary border text-center py-2 border-primary text-white px-8 rounded-r-md hover:bg-transparent hover:text-primary transition hidden md:flex">
             Search
           </button>
@@ -46,7 +46,7 @@ function Header({carCount}) {
               {carCount}
             </div>
           </Link>
-          <Link to="/Profile"
+          <Link to="/profile"
             
             className="text-center text-gray-700 hover:text-primary transition relative"
           >

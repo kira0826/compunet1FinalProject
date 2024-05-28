@@ -12,3 +12,6 @@ export { default as Receipt } from "./checkout/Receipt.js";
 export { default as ProfileSideBar } from "./login/ProfileSideBar.js";
 export { default as ProfileData } from "./login/ProfileData.js";
 export { default as ProductInfo } from "./general/ProductInfo.js";
+export { default as InfoCell } from "./general/InfoCell.js";
+export { default as ClientProductInfo } from "./general/ClientProductInfo.js";
+export { default as EditProduct } from "./general/EditProduct.js";

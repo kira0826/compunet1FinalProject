@@ -27,7 +27,7 @@ function App() {
         <Layout carCount={carCount}>
           <Routes>
             <Route
-              path="/"
+              path="/products"
               element={<Home incrementCartCount={incrementCartCount} />}
               index
             />
@@ -35,6 +35,8 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/products/:id" element={<ProductInfo />} /> //esto se debe quitar 
+
             <Route
               path="/product"
               element={<ProductInfo incrementCartCount={incrementCartCount} />}
