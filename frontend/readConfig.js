@@ -12,6 +12,4 @@ const appPort = properties.get('app.port');
 const appApi = appUrl +  appPort;
 config['app.api'] = String(appApi);
 
-console.log(config);
-
 fs.writeFileSync('./src/config.json', JSON.stringify(config, null, 2));

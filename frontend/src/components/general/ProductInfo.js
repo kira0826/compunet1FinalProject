@@ -1,6 +1,6 @@
 import React from "react";
 
-function ProductInfo() {
+function ProductInfo({incrementCartCount}) {
   return (
     <div className="container grid grid-cols-2 gap-6 pt-4 mt-4">
       <div>
@@ -86,6 +86,7 @@ function ProductInfo() {
           <a
             href="#"
             className="bg-primary border border-primary text-white px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:bg-transparent hover:text-primary transition"
+            onClick={incrementCartCount}
           >
             <i className="fa-solid fa-bag-shopping"></i> Add to cart
           </a>

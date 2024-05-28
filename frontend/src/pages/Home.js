@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Banner, Features, Product } from "../components/index.js";
 import config from "../config.json";
 
-function Home() {
+function Home({incrementCartCount}) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -37,7 +37,7 @@ function Home() {
         <p>Loading products...</p>
       ) : (
         products.map((product) => (
-          <Product key={product.id} product={product} />
+          <Product key={product.id} product={product} incrementCartCount={incrementCartCount} />
         ))
       )}
       </div>

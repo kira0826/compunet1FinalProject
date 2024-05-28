@@ -3,7 +3,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons"; // Import the faUser icon
 import { Link } from 'react-router-dom';
 
-function Header() {
+function Header({carCount}) {
+
+  console.log(Number(carCount))
+
   return (
     <header className="py-4 shadow-sm bg-white">
       <div className="container flex items-center justify-between">
@@ -40,7 +43,7 @@ function Header() {
             </div>
             <div className="text-xs leading-3">Cart</div>
             <div className="absolute -right-3 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
-              2
+              {carCount}
             </div>
           </Link>
           <Link to="/Profile"
