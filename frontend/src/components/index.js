@@ -15,3 +15,4 @@ export { default as ProductInfo } from "./general/ProductInfo.js";
 export { default as InfoCell } from "./general/InfoCell.js";
 export { default as ClientProductInfo } from "./general/ClientProductInfo.js";
 export { default as EditProduct } from "./general/EditProduct.js";
+export { default as Popup} from "./general/Popup.js";

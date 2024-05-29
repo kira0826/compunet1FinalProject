@@ -46,7 +46,7 @@ function LoginGetter() {
       <div className="max-w-lg mx-auto shadow px-6 py-7 rounded overflow-hidden">
         <h2 className="text-2xl uppercase font-medium mb-1">Login</h2>
         <p className="text-gray-600 mb-6 text-sm">welcome back customer</p>
-        <form action="#" method="post" autoComplete="off" onSubmit={fetchUser}>
+        <form method="post" autoComplete="on" onSubmit={fetchUser}>
           <div className="space-y-2">
             <div>
               <label htmlFor="email" className="text-gray-600 mb-2 block">

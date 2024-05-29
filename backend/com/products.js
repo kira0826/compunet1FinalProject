@@ -8,7 +8,6 @@ const products = [
     brand: "Prada",
     name: "Sofa",
     price: 30,
-    color: "White",
     description: "Sofa de 3 plazas"
 
   },
@@ -21,7 +20,6 @@ const products = [
     brand: "Prada",
     name: "Sofa",
     price: 30,
-    color: "White",
     description: "Sofa de 3 plazas"
 
   },
@@ -34,7 +32,6 @@ const products = [
     brand: "Prada",
     name: "Sofa",
     price: 30,
-    color: "White",
     description: "Sofa de 3 plazas"
 
   },
@@ -47,9 +44,8 @@ const products = [
     brand: "Prada",
     name: "Sofa",
     price: 30,
-    color: "White",
     description: "Sofa de 3 plazas"
   }
 ];
 
-export default products;
+export {products};
