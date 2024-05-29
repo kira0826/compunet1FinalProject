@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Banner, Features, Product } from "../components/index.js";
 import config from "../config.json";
+import { useNavigate } from "react-router-dom";
+
 
 function Home({ incrementCartCount }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
- 
+
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -43,7 +45,6 @@ function Home({ incrementCartCount }) {
                 key={product.id}
                 product={product}
                 incrementCartCount={incrementCartCount}
-
 
               />
             ))

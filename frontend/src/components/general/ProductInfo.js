@@ -8,9 +8,12 @@ function ProductInfo({ incrementCartCount }) {
   const userContext = useUser();
 
   const { id } = useParams();
-  const [product, setProduct] = useState(null);
+  const [product, setProduct] = useState({});
+
+
   useEffect(() => {
     const fetchProduct = async () => {
+      try{
       const response = await fetch(config["app.api"] + "/products/" + id, {
         method: "GET",
         headers: {
@@ -18,7 +21,13 @@ function ProductInfo({ incrementCartCount }) {
         },
       });
       const data = await response.json();
+
       setProduct(data.product);
+      console.log(data.product); // Aquí
+
+    }catch(error){
+      console.error("Error fetching product:", error);
+    }
     };
 
     fetchProduct();
@@ -28,12 +37,13 @@ function ProductInfo({ incrementCartCount }) {
     <div className="container grid grid-cols-2 gap-6 pt-4 mt-4">
       <div>
         <img
-          src={product && product.image}
+          src={product.image}  
           alt="product"
           className="w-full h-full"
         />
       </div>
 
+      
       {product ? (
         userContext && userContext.role === "admin" ? (
           <EditProduct product={product} />
@@ -46,6 +56,9 @@ function ProductInfo({ incrementCartCount }) {
       ) : (
         <p>Loading...</p>
       )}
+
+
+
     </div>
   );
 }

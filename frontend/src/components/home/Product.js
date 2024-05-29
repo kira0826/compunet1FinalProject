@@ -1,21 +1,13 @@
 import React, { useEffect } from "react";
 import { useUser } from "../../UserContext.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useNavigate } from "react-router-dom";
-
+import { Link } from "react-router-dom";
 function Product({ product, incrementCartCount }) {
   const user = useUser();
-
-  const navigate = useNavigate();
-
   const { price, name, image, discount } = product;
 
   const total = price - Number(price) * discount;
-
-  const handleProductClick = (id) => {
-    navigate(`/products/${id}`);
-  };
-
+  console.log(product.id)
   useEffect(() => {
     if (user) {
       if (user.role === "admin") {
@@ -26,7 +18,7 @@ function Product({ product, incrementCartCount }) {
 
   return (
     <div className="bg-white shadow rounded overflow-hidden group">
-      <button onClick={() => handleProductClick(product.id)}>
+      <Link  to={`/products/${product.id}`}>
         <div className="relative">
           <img src={image} alt="product" className="w-full" />
           <div
@@ -55,7 +47,7 @@ function Product({ product, incrementCartCount }) {
             )}
           </div>
         </div>
-      </button>
+      </Link>
       <a
         className="block w-full py-1 text-center  hover:cursor-pointer text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition"
         onClick={incrementCartCount}

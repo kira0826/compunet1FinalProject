@@ -35,13 +35,11 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/products/:id" element={<ProductInfo />} /> //esto se debe quitar 
-
             <Route
-              path="/product"
+              path="/products/:id"
               element={<ProductInfo incrementCartCount={incrementCartCount} />}
             />
-          </Routes>
+            </Routes>
         </Layout>
       </UserProvider>
     </Router>

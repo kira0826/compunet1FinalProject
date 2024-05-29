@@ -9,7 +9,7 @@ const products = [
     name: "Sofa",
     price: 30,
     color: "White",
-    descrption: "Sofa de 3 plazas"
+    description: "Sofa de 3 plazas"
 
   },
   {
@@ -22,7 +22,7 @@ const products = [
     name: "Sofa",
     price: 30,
     color: "White",
-    descrption: "Sofa de 3 plazas"
+    description: "Sofa de 3 plazas"
 
   },
   {
@@ -35,7 +35,7 @@ const products = [
     name: "Sofa",
     price: 30,
     color: "White",
-    descrption: "Sofa de 3 plazas"
+    description: "Sofa de 3 plazas"
 
   },
   {
@@ -48,7 +48,7 @@ const products = [
     name: "Sofa",
     price: 30,
     color: "White",
-    descrption: "Sofa de 3 plazas"
+    description: "Sofa de 3 plazas"
   }
 ];
 

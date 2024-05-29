@@ -9,7 +9,7 @@ const user = [
         "phone": "+(57)3168491556",
         "gender": "male",
         "role": "admin",
-        "image": "https://example.com/images/john_doe.jpg"
+        "image": "https://example.com/images/john_doe.jp  g"
       },
 ]
 
