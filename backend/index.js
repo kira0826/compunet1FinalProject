@@ -5,6 +5,11 @@ import products from './com/products.js'
 import { fileURLToPath } from 'url';
 import PropertiesReader from 'properties-reader'
 import writeProductsToFile from './com/Writer.js';
+
+//const sharp = import('sharp');
+import multer from 'multer';
+
+
 // fileURLToPath is used because we are using module ES.
 
 
@@ -12,7 +17,7 @@ import writeProductsToFile from './com/Writer.js';
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const propertiesPath = path.resolve(__dirname, '../config.properties')
-
+import upload from './Storage/Storage.js'
 
 
 const properties = PropertiesReader(propertiesPath)
@@ -38,27 +43,27 @@ app.get('/products', (req, res) => {
 })
 //POST
 
-app.post('/products', (req, res) => {
-
-    console.log("POST /products")
+app.post('/products', upload.single('image'),(req, res) => {
     const {body} = req;
+    //const image = './Storage/imgs' + req.file.originalname
     const newProduct = {
-        id: body.sku, // Generar un nuevo ID
+        id: body.sku, 
         stock: body.stock,
-        image: body.image,
+        image: "./Storage/imgs/" + body.image,
         discount: body.discount,
         category: body.category,
         brand: body.brand,
         name: body.name,
         price: body.price,
-        color: body.color
+        description: body.description
     };
-    console.log("Recibi" + body);
-    console.log(body);
-    console.log(newProduct);
-    products.push(newProduct);
-    writeProductsToFile(products);
-    res.send('Product created');
+
+    if (newProduct.id != null){
+        products.push(newProduct);
+        writeProductsToFile(products);
+    }
+
+    res.send({});
 
 })
 

@@ -33,8 +33,7 @@ function Home({ incrementCartCount }) {
     <div>
       <Banner />
       <div className="container pb-16 pr-16">
-        {" "}
-        <NewProdButton />{" "}
+        <NewProdButton />
       </div>
       <Features />
       <div className="container pb-16">

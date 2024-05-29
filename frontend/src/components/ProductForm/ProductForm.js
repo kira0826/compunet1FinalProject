@@ -17,6 +17,7 @@ function NewProduct() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       setLoading(true);
 
@@ -28,8 +29,8 @@ function NewProduct() {
         price: parseFloat(price),
         discount: parseFloat(discount),
         stock: parseInt(quantity),
-        image: "assets/images/products/product1.jpg", // Replace with actual image URL
-        color: "White", // Default color for now
+        image: image.name,
+        description,
       };
 
       const response = await fetch(config["app.api"] + "/products", {
@@ -39,18 +40,24 @@ function NewProduct() {
         },
         body: JSON.stringify(formData),
       });
-
-      if (!response.ok) {
-        throw new Error("Failed to create product");
-      }
-
-      setLoading(false);
-      alert("Product created successfully");
     } catch (error) {
       setError("Error creating product");
       setLoading(false);
     }
+
+    const imageData = new FormData();
+    imageData.append("image", image);
+    console.log("Image data:", imageData);
+    try {
+      await fetch(config["app.api"] + "/products", {
+        method: "POST",
+        body: imageData,
+      });
+    } catch (error) {
+      console.error("Error al enviar los datos del producto:", error);
+    }
   };
+
   const prod = {
     productName,
     brand,
@@ -61,7 +68,6 @@ function NewProduct() {
     description,
     image,
   };
-  // Aquí se manejará la lógica de envío del formulario
   console.log("Producto creado:", prod);
 
   return (
@@ -187,6 +193,7 @@ function NewProduct() {
         >
           Create Product
         </button>
+        <link to="/"></link>
       </form>
     </div>
   );
