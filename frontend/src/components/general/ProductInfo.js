@@ -9,8 +9,6 @@ function ProductInfo({ incrementCartCount }) {
 
   const { id } = useParams();
 
-  console.log("Id del useParams", id);
-
 
   const [product, setProduct] = useState(null);
   useEffect(() => {
@@ -28,11 +26,13 @@ function ProductInfo({ incrementCartCount }) {
     fetchProduct();
   }, [id]);
 
+
+
   return (
     <div className="container grid grid-cols-2 gap-6 pt-4 mt-4">
       <div>
         <img
-          src={product && product.image}
+          src={product && product.image }
           alt="product"
           className="w-full h-full"
         />

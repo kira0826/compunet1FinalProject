@@ -7,7 +7,6 @@ function Product({ product, incrementCartCount }) {
   const { price, name, image, discount } = product;
 
   const total = price - Number(price) * discount;
-  console.log(product.id)
   useEffect(() => {
     if (user) {
       if (user.role === "admin") {
