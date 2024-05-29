@@ -1,4 +1,4 @@
-const user = [
+const users = [
 
     {
         "firstName": "John",
@@ -14,4 +14,4 @@ const user = [
 ]
 
 
-export default user;
+export {users};
