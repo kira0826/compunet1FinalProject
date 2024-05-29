@@ -1,17 +1,21 @@
-import React from "react";
+import React, {useEffect} from "react";
+import { useUser } from "../../UserContext.js";
 
 function ProfileSideBar() {
+
+    const user = useUser();
+    
 
     return (
         <div className="col-span-3">
         <div className="px-4 py-3 shadow flex items-center gap-4">
             <div className="flex-shrink-0">
-                <img src="../assets/images/avatar.png" alt="profile"
+                <img src={user?user.image :"../assets/images/avatar.png"} alt="profile"
                     className="rounded-full w-14 h-14 border border-gray-200 p-1 object-cover"/>
             </div>
             <div className="flex-grow">
                 <p className="text-gray-600">Hello,</p>
-                <h4 className="text-gray-800 font-medium">John Doe</h4>
+                <h4 className="text-gray-800 font-medium">{user? user.firstName : "not a name" }</h4>
             </div>
         </div>
 
@@ -23,12 +27,7 @@ function ProfileSideBar() {
                     </span>
                     Manage account
                 </a>
-                <a href="#" className="relative hover:text-primary block capitalize transition">
-                    Profile information
-                </a>
-                <a href="#" className="relative hover:text-primary block capitalize transition">
-                    Manage addresses
-                </a>
+        
                 <a href="#" className="relative hover:text-primary block capitalize transition">
                     Change password
                 </a>
@@ -41,15 +40,7 @@ function ProfileSideBar() {
                     </span>
                     My order history
                 </a>
-                <a href="#" className="relative hover:text-primary block capitalize transition">
-                    My returns
-                </a>
-                <a href="#" className="relative hover:text-primary block capitalize transition">
-                    My Cancellations
-                </a>
-                <a href="#" className="relative hover:text-primary block capitalize transition">
-                    My reviews
-                </a>
+              
             </div>
 
             <div className="space-y-1 pl-8 pt-4">
@@ -64,14 +55,6 @@ function ProfileSideBar() {
                 </a>
             </div>
 
-            <div className="space-y-1 pl-8 pt-4">
-                <a href="#" className="relative hover:text-primary block font-medium capitalize transition">
-                    <span className="absolute -left-8 top-0 text-base">
-                        <i className="fa-regular fa-heart"></i>
-                    </span>
-                    My wishlist
-                </a>
-            </div>
 
             <div className="space-y-1 pl-8 pt-4">
                 <a href="#" className="relative hover:text-primary block font-medium capitalize transition">

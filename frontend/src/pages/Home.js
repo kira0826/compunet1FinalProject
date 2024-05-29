@@ -6,16 +6,23 @@ import {
   NewProdButton,
 } from "../components/index.js";
 import config from "../config.json";
+import { useNavigate } from "react-router-dom";
 
-function Home({ incrementCartCount }) {
+
+function Home({  incrementCartCount  }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        console.log(config["app.api"]);
-        const response = await fetch(config["app.api"] + "/products");
+        const response = await fetch(config["app.api"] + "/products",{
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },  
+        });
 
         const data = await response.json();
         setProducts(data);
@@ -46,6 +53,7 @@ function Home({ incrementCartCount }) {
                 key={product.id}
                 product={product}
                 incrementCartCount={incrementCartCount}
+
               />
             ))
           )}
