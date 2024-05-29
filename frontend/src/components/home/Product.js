@@ -34,6 +34,7 @@ function Product({ product, incrementCartCount }) {
     }
     deleteProduct();  
     setShowPopup(false);
+    window.location.reload(); 
 
   };
 
