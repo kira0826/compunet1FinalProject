@@ -54,7 +54,7 @@ function ProductInfo({ incrementCartCount }) {
 
       {product ? (
         userContext && userContext.role === "admin" ? (
-          <EditProduct product={product} />
+          <EditProduct product={product} image={image} />
         ) : (
           <ClientProductInfo
             incrementCartCount={incrementCartCount}

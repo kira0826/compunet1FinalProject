@@ -3,7 +3,7 @@ import { InfoCell } from "../index.js";
 import { useState } from "react";
 import config from "../../config.json";
 
-function EditProduct({ product }) {
+function EditProduct({ product, image }) {
   const [formData, setFormData] = useState({
     name: product.name,
     stock: product.stock,
@@ -13,6 +13,7 @@ function EditProduct({ product }) {
     price: product.price,
     description: product.description,
     discount: product.discount,
+    image:image,
   });
 
   const handleInputChange = (e) => {
