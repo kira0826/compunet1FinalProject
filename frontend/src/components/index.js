@@ -16,3 +16,4 @@ export { default as InfoCell } from "./general/InfoCell.js";
 export { default as ClientProductInfo } from "./general/ClientProductInfo.js";
 export { default as EditProduct } from "./general/EditProduct.js";
 export { default as Popup} from "./general/Popup.js";
+export { default as Logout } from "./login/Logout.js";   

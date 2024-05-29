@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt } from "@fortawesome/free-regular-svg-icons"; // Importa el ícono de eliminación de FontAwesome
 import { Link } from "react-router-dom";
 import { Popup } from "../index.js";
+import config from "../../config.json";
 
 function Product({ product, incrementCartCount }) {
   const [showPopup, setShowPopup] = useState(false);
@@ -12,24 +13,33 @@ function Product({ product, incrementCartCount }) {
 
   const total = price - Number(price) * discount;
 
-
-
   const handleDelete = () => {
     setShowPopup(true);
   };
 
   const handleConfirmDelete = () => {
-    // Lógica para eliminar el elemento aquí
+    async function deleteProduct() {
+      const response = await fetch(
+        config["app.api"] + "/products/" + product.id,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.ok) {
+        console.log("Producto eliminado");
+      }
+    }
+    deleteProduct();  
     setShowPopup(false);
+
   };
 
   const handleCancelDelete = () => {
     setShowPopup(false);
   };
-
-  useEffect(() => {
-
-  },[showPopup])
 
   useEffect(() => {
     if (user) {
@@ -71,20 +81,24 @@ function Product({ product, incrementCartCount }) {
                 </Link>
               </button>
 
-              <button className="text-xl text-primary font-semibold  h-full delete-button" onClick={handleDelete}>
-                {showPopup && (
-                  <Popup
-                    message="¿Estás seguro de que quieres eliminar este producto?"
-                    onConfirm={handleConfirmDelete}
-                    onCancel={handleCancelDelete}
-                  />
-                )}
+              <button
+                className="text-xl text-primary font-semibold  h-full delete-button"
+                onClick={handleDelete}
+              >
                 <FontAwesomeIcon icon={faTrashAlt} className="delete-icon" />
               </button>
             </div>
           )}
         </div>
       </div>
+
+      {showPopup && (
+        <Popup
+          message="¿Estás seguro de que quieres eliminar este producto?"
+          onConfirm={handleConfirmDelete}
+          onCancel={handleCancelDelete}
+        />
+      )}
       <a
         className="block w-full py-1 text-center  hover:cursor-pointer text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition"
         onClick={incrementCartCount}

@@ -21,7 +21,10 @@ app.use(cors());
 
 app.listen(port, () => {
   console.log("Server listen in " + port);
+  console.log("products", products);
+
 });
+
 
 //GET
 
@@ -91,3 +94,26 @@ app.patch("/products/:id", (req, res) => {
 });
 
 //PUT
+
+//DELETE  
+
+app.delete("/products/:id", (req, res) => {
+
+  const { id } = req.params;
+  console.log("DELETE /products/:id", id);
+
+  const productIndex = products.findIndex((elem) => elem.id === Number(id));
+
+  if (productIndex === -1) {
+    res.status(404).json({ message: "Product not found" });
+    return;
+  }
+
+
+  console.log("Antes", products);
+  products.splice(productIndex, 1);
+  console.log("Despues", products);
+
+  res.status(200).json({ message: "Product successfully deleted" });
+
+})

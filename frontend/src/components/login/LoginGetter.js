@@ -29,6 +29,9 @@ function LoginGetter() {
       if (response.ok) {
         const data = await response.json();
         setUser(data.user);
+
+        localStorage.setItem("user", JSON.stringify(data));
+        
         navigate("/");
       } else {
         const errorData = await response.json();

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 
 const UserContext = React.createContext();
 const UserUpdateContext = React.createContext();
@@ -12,14 +12,34 @@ export function useUserUpdate() {
 }
 
 export function UserProvider({ children }) {
-  const [user, setUser] = useState(null);
+
+  const [userContext, setUser] = useState(null);
 
   function updateUser(newUser) {
     setUser(newUser);
   }
 
+  async function fetchUser() {
+    const storedUser = localStorage.getItem("user");
+    return await storedUser.json();
+  }
+
+  useEffect(() => {
+
+    const storedUser = localStorage.getItem("user");
+    console.log("storedUser in context", storedUser);
+    if (storedUser) {
+      console.log("Dentro del if");
+      const  {user} = JSON.parse(storedUser);
+      console.log("Parseo JSON", user);
+      setUser(user);
+    }
+    console.log("user metido", userContext);
+  }, []);
+
+
   return (
-    <UserContext.Provider value={user}>
+    <UserContext.Provider value={userContext}>
       <UserUpdateContext.Provider value={updateUser}>
         {children}
       </UserUpdateContext.Provider>
