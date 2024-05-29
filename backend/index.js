@@ -26,9 +26,21 @@ app.listen(port, () => {
 //GET
 
 app.get("/products", (req, res) => {
-  console.log("GET /products");
+  //console.log("GET /products");
   res.status(200).json(products);
 });
+
+
+app.get("/products/:id", (req, res) => {
+
+  const { id } = req.params
+  console.log("GET /products/:id", id);
+
+  const product = products.find((elem) => elem.id === Number(id))
+  res.status(200).json({product, message: "product successfully got." })
+
+
+})
 
 
 

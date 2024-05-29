@@ -1,16 +1,17 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import config from "../../config.json";
 import { useUser, useUserUpdate } from "../../UserContext.js";
 
 function LoginGetter() {
   const setUser = useUserUpdate()
-  const userContext = useUser()
-  console.log("contexto incial",userContext)
+  const UserContext = useUser()
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate(); // Inicializa el hook de navegación
+
 
   async function fetchUser(event) {
     event.preventDefault();
@@ -27,7 +28,8 @@ function LoginGetter() {
 
       if (response.ok) {
         const data = await response.json();
-        await setUser(data.user);
+        setUser(data.user);
+        navigate("/");
       } else {
         const errorData = await response.json();
         console.log(errorData);

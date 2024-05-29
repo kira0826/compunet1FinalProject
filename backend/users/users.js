@@ -3,7 +3,7 @@ const user = [
     {
         "firstName": "John",
         "lastName": "Doe",
-        "birthday": "01/01/1999",
+        "birthday": "1999-01-01",
         "email": "john.doe@gmail.com",
         "password":"1234",
         "phone": "+(57)3168491556",

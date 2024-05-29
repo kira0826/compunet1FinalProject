@@ -1,17 +1,21 @@
-import React from "react";
+import React, {useEffect} from "react";
+import { useUser } from "../../UserContext.js";
 
 function ProfileSideBar() {
+
+    const user = useUser();
+    
 
     return (
         <div className="col-span-3">
         <div className="px-4 py-3 shadow flex items-center gap-4">
             <div className="flex-shrink-0">
-                <img src="../assets/images/avatar.png" alt="profile"
+                <img src={user?user.image :"../assets/images/avatar.png"} alt="profile"
                     className="rounded-full w-14 h-14 border border-gray-200 p-1 object-cover"/>
             </div>
             <div className="flex-grow">
                 <p className="text-gray-600">Hello,</p>
-                <h4 className="text-gray-800 font-medium">John Doe</h4>
+                <h4 className="text-gray-800 font-medium">{user? user.firstName : "not a name" }</h4>
             </div>
         </div>
 

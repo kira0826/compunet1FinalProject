@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { UserProvider } from "./UserContext.js";
+import { CheckoutProvider } from "./CheckoutContext.js";
 
 import {
   Home,
@@ -23,11 +24,12 @@ function App() {
 
   return (
     <Router>
+      <CheckoutProvider>
       <UserProvider>
         <Layout carCount={carCount}>
           <Routes>
             <Route
-              path="/"
+              path="/products"
               element={<Home incrementCartCount={incrementCartCount} />}
               index
             />
@@ -35,6 +37,8 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/products/:id" element={<ProductInfo />} /> //esto se debe quitar 
+
             <Route
               path="/product"
               element={<ProductInfo incrementCartCount={incrementCartCount} />}
@@ -42,6 +46,7 @@ function App() {
           </Routes>
         </Layout>
       </UserProvider>
+      </CheckoutProvider>
     </Router>
   );
 }
