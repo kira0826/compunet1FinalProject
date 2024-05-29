@@ -23,6 +23,8 @@ app.listen(port, () => {
   console.log("Server listen in " + port);
 });
 
+
+
 //GET
 
 app.get("/products", (req, res) => {

@@ -8,7 +8,7 @@ function Header({carCount}) {
   return (
     <header className="py-4 shadow-sm bg-white">
       <div className="container flex items-center justify-between">
-        <Link to="/products">
+        <Link to="/">
           <img src="assets/images/logo.svg" alt="Logo" className="w-32" />
         </Link>
 

@@ -18,7 +18,7 @@ function Product({ product, incrementCartCount }) {
 
   return (
     <div className="bg-white shadow rounded overflow-hidden group">
-      <Link  to={`/products/${product.id}`}>
+       <Link  to={`/products/${product.id}`}>
         <div className="relative">
           <img src={image} alt="product" className="w-full" />
           <div
@@ -27,11 +27,11 @@ function Product({ product, incrementCartCount }) {
           ></div>
         </div>
         <div className="pt-4 pb-3 px-4">
-          <a href="#">
+          <div >
             <h4 className="uppercase font-medium text-xl mb-2 text-gray-800 hover:text-primary transition">
               {name}
             </h4>
-          </a>
+          </div>
           <div className="flex items-baseline justify-between mb-1 ">
             <div className="flex space-x-2">
               <p className="text-xl text-primary font-semibold"> ${total}</p>

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { UserProvider } from "./UserContext.js";
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
 
 import {
   Home,
@@ -27,7 +29,7 @@ function App() {
         <Layout carCount={carCount}>
           <Routes>
             <Route
-              path="/products"
+              path="/"
               element={<Home incrementCartCount={incrementCartCount} />}
               index
             />
@@ -39,7 +41,7 @@ function App() {
               path="/products/:id"
               element={<ProductInfo incrementCartCount={incrementCartCount} />}
             />
-            </Routes>
+          </Routes>
         </Layout>
       </UserProvider>
     </Router>
