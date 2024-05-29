@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useUser } from "../../UserContext.js";
-import { ClientProductInfo, EditProduct } from "../index.js";
+import { ClientProductInfo, EditProduct,ImageUploader } from "../index.js";
 import { useParams } from "react-router-dom";
 import config from "../../config.json";
 
 function ProductInfo({ incrementCartCount }) {
   const userContext = useUser();
+  const [image, setImage] = useState(null);
 
   const { id } = useParams();
 
@@ -30,12 +31,25 @@ function ProductInfo({ incrementCartCount }) {
 
   return (
     <div className="container grid grid-cols-2 gap-6 pt-4 mt-4">
-      <div>
-        <img
+      <div className="w-h-full">
+
+      {product ? (
+        userContext && userContext.role === "admin" ? (
+
+          <ImageUploader setImageExt={setImage} imagePreview={product.image} />
+            
+        ) : (
+          <img
           src={product && product.image }
           alt="product"
           className="w-full h-full"
         />
+        )
+      ) : (
+        <p>Loading...</p>
+      )}
+
+       
       </div>
 
       {product ? (

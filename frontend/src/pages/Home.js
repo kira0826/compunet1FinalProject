@@ -7,21 +7,21 @@ import {
 } from "../components/index.js";
 import config from "../config.json";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../UserContext.js";
 
-
-function Home({  incrementCartCount  }) {
+function Home({ incrementCartCount }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const UserContext = useUser();
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(config["app.api"] + "/products",{
+        const response = await fetch(config["app.api"] + "/products", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-          },  
+          },
         });
 
         const data = await response.json();
@@ -40,7 +40,7 @@ function Home({  incrementCartCount  }) {
     <div>
       <Banner />
       <div className="container pb-16 pr-16">
-        <NewProdButton />
+        {UserContext && <NewProdButton />}
       </div>
       <Features />
       <div className="container pb-16">
@@ -53,7 +53,6 @@ function Home({  incrementCartCount  }) {
                 key={product.id}
                 product={product}
                 incrementCartCount={incrementCartCount}
-
               />
             ))
           )}

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function NewImage( {setImageExt} ) {
+function NewImage({ setImageExt, imagePreview }) {
   const [image, setImage] = useState(null);
 
   const handleImageChange = (e) => {
@@ -9,11 +9,17 @@ function NewImage( {setImageExt} ) {
   };
 
   return (
-    <div>
+    <div className="h-full w-full">
       <div className="w-full h-full border-dashed border-2 border-gray-300 flex items-center justify-center">
         {image ? (
           <img
             src={URL.createObjectURL(image)}
+            alt="product preview"
+            className="w-full h-full object-cover"
+          />
+        ) : imagePreview ? (
+          <img
+            src={imagePreview}
             alt="product preview"
             className="w-full h-full object-cover"
           />

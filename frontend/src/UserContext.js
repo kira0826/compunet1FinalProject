@@ -13,7 +13,7 @@ export function useUserUpdate() {
 
 export function UserProvider({ children }) {
 
-  const [userContext, setUser] = useState(null);
+  const [user, setUser] = useState(null);
 
   function updateUser(newUser) {
     setUser(newUser);
@@ -30,16 +30,16 @@ export function UserProvider({ children }) {
     console.log("storedUser in context", storedUser);
     if (storedUser) {
       console.log("Dentro del if");
-      const  {user} = JSON.parse(storedUser);
+      const {user} = JSON.parse(storedUser);
       console.log("Parseo JSON", user);
       setUser(user);
     }
-    console.log("user metido", userContext);
+    console.log("user metido", user);
   }, []);
 
 
   return (
-    <UserContext.Provider value={userContext}>
+    <UserContext.Provider value={user}>
       <UserUpdateContext.Provider value={updateUser}>
         {children}
       </UserUpdateContext.Provider>
