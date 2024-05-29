@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Banner, Features, Product } from "../components/index.js";
+import {
+  Banner,
+  Features,
+  Product,
+  NewProdButton,
+} from "../components/index.js";
 import config from "../config.json";
 import { useNavigate } from "react-router-dom";
 
 
-function Home({ incrementCartCount }) {
+function Home({  incrementCartCount  }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -34,6 +39,9 @@ function Home({ incrementCartCount }) {
   return (
     <div>
       <Banner />
+      <div className="container pb-16 pr-16">
+        <NewProdButton />
+      </div>
       <Features />
       <div className="container pb-16">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">

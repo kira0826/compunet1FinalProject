@@ -4,13 +4,22 @@ import path from "path";
 import { fileURLToPath } from "url";
 import PropertiesReader from "properties-reader";
 import { products } from "./com/products.js";
+import writeProductsToFile from './com/Writer.js';
+
+//const sharp = import('sharp');
+import multer from 'multer';
+
 import { users } from "./users/users.js";
 
 // fileURLToPath is used because we are using module ES.
 
+
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const propertiesPath = path.resolve(__dirname, "../config.properties");
+import upload from './Storage/Storage.js'
+
 
 const properties = PropertiesReader(propertiesPath);
 const port = properties.get("app.port");
@@ -38,6 +47,30 @@ app.get("/products/:id", (req, res) => {
 });
 
 //POST
+
+app.post('/products', upload.single('image'),(req, res) => {
+    const {body} = req;
+    //const image = './Storage/imgs' + req.file.originalname
+    const newProduct = {
+        id: products.length + 1, 
+        stock: body.stock,
+        image: "./Storage/imgs/" + body.image,
+        discount: body.discount,
+        category: body.category,
+        brand: body.brand,
+        name: body.name,
+        price: body.price,
+        description: body.description
+    };
+
+    if (newProduct.id != null){
+        products.push(newProduct);
+        //writeProductsToFile(products);
+    }
+
+    res.send({});
+
+})
 app.post("/login", (req, res) => {
   console.log("POST /login");
 

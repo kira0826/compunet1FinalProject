@@ -12,9 +12,11 @@ import {
   Profile,
   ProductInfo,
   Layout,
+  ProductForm
 } from "./pages/index.js";
 
 import "./components/fontAwesome.js";
+
 
 function App() {
   const [carCount, setCarCount] = useState(0);
@@ -41,7 +43,8 @@ function App() {
               path="/products/:id"
               element={<ProductInfo incrementCartCount={incrementCartCount} />}
             />
-          </Routes>
+            <Route path="/productForm" element={<ProductForm incrementCartCount={incrementCartCount}/>} />
+        </Routes>
         </Layout>
       </UserProvider>
     </Router>
