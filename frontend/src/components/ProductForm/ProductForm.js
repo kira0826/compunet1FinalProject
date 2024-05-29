@@ -25,7 +25,7 @@ function NewProduct() {
         name: productName,
         brand,
         category,
-        sku,
+        sku: parseInt(sku),
         price: parseFloat(price),
         discount: parseFloat(discount),
         stock: parseInt(quantity),
@@ -193,7 +193,6 @@ function NewProduct() {
         >
           Create Product
         </button>
-        <link to="/"></link>
       </form>
     </div>
   );

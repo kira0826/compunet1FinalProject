@@ -56,7 +56,7 @@ app.post('/products', upload.single('image'),(req, res) => {
     const {body} = req;
     //const image = './Storage/imgs' + req.file.originalname
     const newProduct = {
-        id: body.sku, 
+        id: products.length + 1, 
         stock: body.stock,
         image: "./Storage/imgs/" + body.image,
         discount: body.discount,
@@ -69,7 +69,7 @@ app.post('/products', upload.single('image'),(req, res) => {
 
     if (newProduct.id != null){
         products.push(newProduct);
-        writeProductsToFile(products);
+        //writeProductsToFile(products);
     }
 
     res.send({});
