@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import ImageUploader from "./ImageUploader.js";
 import config from "../../config.json";
+import Compressor from "compressorjs";
+//import sharp from "sharp";
 
 function NewProduct() {
   const [productName, setProductName] = useState("");
@@ -15,11 +17,33 @@ function NewProduct() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  async function convertToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+      reader.readAsDataURL(file);
+    });
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       setLoading(true);
+
+      let imageURL = await convertToBase64(image);
+      console.log("Image URL OG:", imageURL);
+      const formData2 = new FormData();
+      formData2.append("name", productName);
+      formData2.append("brand", brand);
+      formData2.append("category", category);
+      formData2.append("sku", sku);
+      formData2.append("price", price);
+      formData2.append("discount", discount);
+      formData2.append("stock", quantity);
+      formData2.append("image", imageURL);
+      formData2.append("description", description);
 
       const formData = {
         name: productName,
@@ -29,7 +53,7 @@ function NewProduct() {
         price: parseFloat(price),
         discount: parseFloat(discount),
         stock: parseInt(quantity),
-        image: image.name,
+        image: imageURL,
         description,
       };
 
@@ -38,20 +62,46 @@ function NewProduct() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formData2),
       });
     } catch (error) {
       setError("Error creating product");
       setLoading(false);
     }
 
-    const imageData = new FormData();
-    imageData.append("image", image);
-    console.log("Image data:", imageData);
+    let newImage;
+
+    new Compressor(image, {
+      quality: 0.2, // Ajusta la calidad de la imagen comprimida (0.6 es un valor por defecto)
+      maxWidth: 800, // Ajusta el ancho máximo de la imagen
+      success(result) {
+        newImage = result;
+      },
+      error(err) {
+        console.error("Error al comprimir la imagen:", err);
+      },
+    });
+
+    let imageURL = await convertToBase64(image);
+    console.log("Image URL new:", imageURL);
+    //const imageData = new FormData();
+    //imageData.append("image", image);
+    //console.log("Image data:", imageData);
+    const formData2 = new FormData();
+    formData2.append("name", productName);
+    formData2.append("brand", brand);
+    formData2.append("category", category);
+    formData2.append("sku", sku);
+    formData2.append("price", price);
+    formData2.append("discount", discount);
+    formData2.append("stock", quantity);
+    formData2.append("image", imageURL);
+    formData2.append("description", description);
     try {
       await fetch(config["app.api"] + "/products", {
         method: "POST",
-        body: imageData,
+        headers: {},
+        body: formData2,
       });
     } catch (error) {
       console.error("Error al enviar los datos del producto:", error);
@@ -66,7 +116,6 @@ function NewProduct() {
     price,
     quantity,
     description,
-    image,
   };
   console.log("Producto creado:", prod);
 
@@ -112,20 +161,6 @@ function NewProduct() {
             id="category"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="block w-full border border-gray-300 px-4 py-2 text-gray-600 rounded focus:ring-0 focus:border-primary"
-            required
-          />
-        </div>
-
-        <div>
-          <label htmlFor="sku" className="text-gray-800 font-semibold">
-            SKU
-          </label>
-          <input
-            type="text"
-            id="sku"
-            value={sku}
-            onChange={(e) => setSku(e.target.value)}
             className="block w-full border border-gray-300 px-4 py-2 text-gray-600 rounded focus:ring-0 focus:border-primary"
             required
           />

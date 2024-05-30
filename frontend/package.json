@@ -11,12 +11,14 @@
     "@fortawesome/free-regular-svg-icons": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "compressorjs": "^1.2.1",
     "flowbite": "1.6.5",
     "properties-reader": "^2.3.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.23.1",
     "react-scripts": "5.0.1",
+    "sharp": "^0.33.4",
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {

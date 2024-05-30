@@ -6,7 +6,7 @@ import { fileURLToPath } from "url";
 import PropertiesReader from "properties-reader";
 import { products } from "./com/products.js";
 import writeProductsToFile from './com/Writer.js';
-
+import bodyParser from 'body-parser';
 //const sharp = import('sharp');
 import multer from 'multer';
 
@@ -23,10 +23,12 @@ import upload from './Storage/Storage.js'
 
 const properties = PropertiesReader(propertiesPath);
 const port = properties.get("app.port");
+const url = properties.get("app.url");
 
 const app = express();
 app.use(express.json());
 app.use(cors());
+
 
 app.listen(port, () => {
   console.log("Server listen in " + port);
@@ -53,12 +55,15 @@ app.get("/products/:id", (req, res) => {
 //POST
 
 app.post('/products', upload.single('image'),(req, res) => {
+    const file = req.file;
+    console.log("POST /products", req.body);
     const {body} = req;
     //const image = './Storage/imgs' + req.file.originalname
     const newProduct = {
         id: products.length + 1, 
         stock: body.stock,
-        image: "./Storage/imgs/" + body.image,
+        //image: "./Storage/imgs/" + body.image,
+        image: body.image,
         discount: body.discount,
         category: body.category,
         brand: body.brand,
@@ -66,10 +71,10 @@ app.post('/products', upload.single('image'),(req, res) => {
         price: body.price,
         description: body.description
     };
-
-    if (newProduct.id != null){
+    console.log("newProduct", newProduct);
+    if (newProduct.name != null){
         products.push(newProduct);
-        //writeProductsToFile(products);
+        writeProductsToFile(products);
     }
 
     res.send({});
