@@ -69,6 +69,25 @@ app.post("/login", (req, res) => {
       res.status(401).json({ message: "Invalid email or password" }); // Send error message
     }
   });
+
 //PATCH
 
 //PUT
+app.put("/products/:id", (req, res) => {
+  const { id } = req.params;
+
+  console.log("PUT /products/:id", id)
+
+  const updatedProduct = req.body;
+
+  console.log("producto upd: " + updatedProduct.quantity)
+
+  const productIndex = products.findIndex((elem) => elem.id === Number(id));
+
+  if (productIndex !== -1) {
+    products[productIndex] = { ...products[productIndex], ...updatedProduct };
+    res.status(200).json({ product: products[productIndex], message: "Product successfully updated." });
+  } else {
+    res.status(404).json({ message: "Product not found." });
+  }
+})

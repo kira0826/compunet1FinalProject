@@ -22,6 +22,8 @@ export function CheckoutProvider({ children }) {
     if (cond == 1) {
         setCheckout([...checkout, product]);
     } else {
+        console.log()
+        console.log("entra a eliminar")
         setCheckout(checkout.filter(item => item.id != product));
     }
   }
