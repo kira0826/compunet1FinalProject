@@ -4,22 +4,25 @@ import path from "path";
 import { fileURLToPath } from "url";
 import PropertiesReader from "properties-reader";
 import { products } from "./com/products.js";
-import writeProductsToFile from './com/Writer.js';
-
-//const sharp = import('sharp');
-import multer from 'multer';
+import writeSomethingToFile from "./com/Writer.js";
+import multer from "multer";
 
 import { users } from "./users/users.js";
 
 // fileURLToPath is used because we are using module ES.
 
-
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const propertiesPath = path.resolve(__dirname, "../config.properties");
-import upload from './Storage/Storage.js'
-
+import upload from "./Storage/Storage.js";
+const userFileInfo = {
+  path: `./users/users.js`,
+  variableName: `users`,
+}
+const productsFileInfo = {
+  path: `./com/products.js`,
+  variableName: `products`,
+}
 
 const properties = PropertiesReader(propertiesPath);
 const port = properties.get("app.port");
@@ -48,29 +51,27 @@ app.get("/products/:id", (req, res) => {
 
 //POST
 
-app.post('/products', upload.single('image'),(req, res) => {
-    const {body} = req;
-    //const image = './Storage/imgs' + req.file.originalname
-    const newProduct = {
-        id: products.length + 1, 
-        stock: body.stock,
-        image: "./Storage/imgs/" + body.image,
-        discount: body.discount,
-        category: body.category,
-        brand: body.brand,
-        name: body.name,
-        price: body.price,
-        description: body.description
-    };
+app.post("/products", upload.single("image"), (req, res) => {
+  const { body } = req;
+  //const image = './Storage/imgs' + req.file.originalname
+  const newProduct = {
+    id: products.length + 1,
+    stock: body.stock,
+    image: "./Storage/imgs/" + body.image,
+    discount: body.discount,
+    category: body.category,
+    brand: body.brand,
+    name: body.name,
+    price: body.price,
+    description: body.description,
+  };
 
-    if (newProduct.id != null){
-        products.push(newProduct);
-        //writeProductsToFile(products);
-    }
+  if (newProduct.id != null) {
+    products.push(newProduct);
+  }
 
-    res.send({});
-
-})
+  res.send({});
+});
 app.post("/login", (req, res) => {
   console.log("POST /login");
 
@@ -94,16 +95,8 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-  console.log("POST /register");
-  console.log("req.body", req.body);
-
   const { name, email, password, confirmPass } = req.body;
-
-
-  const [ firstName, lastName ] = String(name).split(" ");
-
-  console.log("firstName", firstName);  
-  console.log("last", lastName);  
+  const [firstName, lastName] = String(name).split(" ");
 
   if (!name || !email || !password || !confirmPass) {
     return res
@@ -122,16 +115,15 @@ app.post("/register", (req, res) => {
   }
 
   const newUser = {
-    firstName: lastName,
+    firstName: firstName,
     lastName: lastName,
     email: email,
     password: password,
-    confirmPass: confirmPass,
   };
 
-  console.log("ANtes del push", users);
   users.push(newUser);
-  console.log("Despues del push", users);
+
+  writeSomethingToFile( userFileInfo.path, userFileInfo.variableName, users);
 
   console.log("Usuario registrado:", newUser);
 
@@ -155,9 +147,14 @@ app.patch("/products/:id", (req, res) => {
 
   const product = products[productIndex];
 
+
   for (const key in body) {
     product[key] = body[key];
   }
+
+  products[productIndex] = product;
+  writeSomethingToFile( productsFileInfo.path, productsFileInfo.variableName, products);
+
   res.status(200).json({ message: "Login successful" });
 });
 
@@ -176,8 +173,9 @@ app.delete("/products/:id", (req, res) => {
     return;
   }
 
-  console.log("Antes", products);
   products.splice(productIndex, 1);
+  writeSomethingToFile( productsFileInfo.path, productsFileInfo.variableName, products);
+
   console.log("Despues", products);
 
   res.status(200).json({ message: "Product successfully deleted" });

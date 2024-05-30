@@ -3,6 +3,8 @@ import React, { useState } from "react";
 function NewImage({ setImageExt, imagePreview }) {
   const [image, setImage] = useState(null);
 
+  console.log(imagePreview);
+
   const handleImageChange = (e) => {
     setImageExt(e.target.files[0]);
     setImage(e.target.files[0]);
@@ -18,6 +20,7 @@ function NewImage({ setImageExt, imagePreview }) {
             className="w-full h-full object-cover"
           />
         ) : imagePreview ? (
+          
           <img
             src={imagePreview}
             alt="product preview"

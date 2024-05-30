@@ -2,9 +2,15 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { InfoCellRegister } from "../index.js";
 import config from "../../config.json";
+import {  useUserUpdate } from "../../UserContext.js";
+import { useNavigate } from "react-router-dom";
 
 
 function RegisterGetter() {
+  const navigate = useNavigate(); // Inicializa el hook de navegación
+
+  const setUser = useUserUpdate()
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -41,6 +47,34 @@ function RegisterGetter() {
       }
 
       console.log("Usuario registrado con éxito.");
+
+      try {
+        const response = await fetch(config["app.api"] + "/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+  
+          body: JSON.stringify({ email:formData.email, password : formData.password }),
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data.user);
+  
+          localStorage.setItem("user", JSON.stringify(data));
+          
+          navigate("/");
+        } else {
+          const errorData = await response.json();
+          console.log(errorData);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+
+
+
     } catch (error) {
       console.error("Error al actualizar el producto:", error.message);
     }

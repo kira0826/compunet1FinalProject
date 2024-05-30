@@ -6,12 +6,13 @@ import config from "../../config.json";
 
 function ProductInfo({ incrementCartCount }) {
   const userContext = useUser();
-  const [image, setImage] = useState(null);
 
   const { id } = useParams();
 
 
   const [product, setProduct] = useState(null);
+  const [image, setImage] = useState(null);
+
   useEffect(() => {
     const fetchProduct = async () => {
       const response = await fetch(config["app.api"] + "/products/" + id, {
@@ -22,6 +23,7 @@ function ProductInfo({ incrementCartCount }) {
       });
       const data = await response.json();
       setProduct(data.product);
+      setImage(data.product.image);
     };
 
     fetchProduct();
