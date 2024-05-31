@@ -5,7 +5,6 @@ import config from "../config.json";
 function Home({ incrementCartCount }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
- 
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -43,8 +42,6 @@ function Home({ incrementCartCount }) {
                 key={product.id}
                 product={product}
                 incrementCartCount={incrementCartCount}
-
-
               />
             ))
           )}

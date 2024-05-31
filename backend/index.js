@@ -80,7 +80,7 @@ app.put("/products/:id", (req, res) => {
 
   const updatedProduct = req.body;
 
-  console.log("producto upd: " + updatedProduct.quantity)
+  console.log("producto upd: " + updatedProduct.stock)
 
   const productIndex = products.findIndex((elem) => elem.id === Number(id));
 

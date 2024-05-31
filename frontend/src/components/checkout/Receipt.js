@@ -2,7 +2,10 @@ import React from "react";
 import { useCheckout, useCheckoutUpdate} from '../../CheckoutContext.js';
 import config from "../../config.json";
 
-function Receipt() {
+// substractCar -> func que viene de checkout
+// para restarle cantidad al carrito cada vez
+// que quite un producto
+function Receipt({ substractCart }) {
     const updateCheckout = useCheckoutUpdate(); // funcion updateCheckout
 
     // costo de envio
@@ -40,12 +43,12 @@ function Receipt() {
     
     const handleDeleteClick = (id) => {
         updateCheckout(id, 0);
+        substractCart();
     }
 
     const handlePlaceOrderClick = async () => {
         for (const product of checkout) {
-            const updatedProduct = { ...product, quantity: product.quantity - 1 };
-            console.log("updated product front: " + updatedProduct.quantity)
+            const updatedProduct = { ...product, stock: product.stock - 1 };
 
             try {
                 const response = await fetch(config["app.api"] + "/products/" + product.id, {
@@ -61,7 +64,8 @@ function Receipt() {
                 }
 
                 // Si la actualización es exitosa, actualiza localmente el checkout
-                updateCheckout(product.id, updatedProduct.quantity);
+                substractCart();
+                updateCheckout(product.id, updatedProduct.stock);
             } catch (error) {
                 console.error('Error al actualizar el producto:', error);
             }

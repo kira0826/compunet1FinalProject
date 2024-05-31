@@ -22,30 +22,34 @@ function App() {
     setCarCount(carCount + 1);
   };
 
+  // restamos al cart 1
+  // pasamos por props a checkout -> receipt
+  const substractCart = () => {
+    setCarCount(carCount - 1);
+  }
+
   return (
     <Router>
       <CheckoutProvider>
-      <UserProvider>
-        <Layout carCount={carCount}>
-          <Routes>
-            <Route
-              path="/products"
-              element={<Home incrementCartCount={incrementCartCount} />}
-              index
-            />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/products/:id" element={<ProductInfo />} /> //esto se debe quitar 
-
-            <Route
-              path="/product"
-              element={<ProductInfo incrementCartCount={incrementCartCount} />}
-            />
-          </Routes>
-        </Layout>
-      </UserProvider>
+        <UserProvider>
+          <Layout carCount={carCount}>
+            <Routes>
+              <Route
+                path="/products"
+                element={<Home incrementCartCount={incrementCartCount} />}
+                index
+              />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/checkout" element={<Checkout substractCart={substractCart}/>} />
+              <Route path="/profile" element={<Profile />} />
+              <Route 
+                path="/products/:id" 
+                element={<ProductInfo incrementCartCount={incrementCartCount} />} 
+              /> 
+            </Routes>
+          </Layout>
+        </UserProvider>
       </CheckoutProvider>
     </Router>
   );

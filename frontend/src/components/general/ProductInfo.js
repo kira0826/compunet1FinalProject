@@ -9,6 +9,7 @@ function ProductInfo({ incrementCartCount }) {
 
   const { id } = useParams();
   const [product, setProduct] = useState(null);
+
   useEffect(() => {
     const fetchProduct = async () => {
       const response = await fetch(config["app.api"] + "/products/" + id, {
