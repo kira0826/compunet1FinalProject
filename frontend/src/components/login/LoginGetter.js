@@ -82,6 +82,7 @@ function LoginGetter() {
             <div className="flex items-center">
               <input
                 type="checkbox"
+                
                 name="remember"
                 id="remember"
                 className="text-primary focus:ring-0 rounded-sm cursor-pointer"

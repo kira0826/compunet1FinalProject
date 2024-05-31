@@ -4,6 +4,8 @@ import { RegisterGetter } from "../components/index.js";
 
 function Register() {
 
+
+
     return (
         <div>
         <RegisterGetter />

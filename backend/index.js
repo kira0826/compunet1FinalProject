@@ -1,25 +1,28 @@
 import express from "express";
 import cors from "cors";
 import path from "path";
-import users from "./users/users.js";
 import { fileURLToPath } from "url";
 import PropertiesReader from "properties-reader";
 import { products } from "./com/products.js";
-import writeProductsToFile from './com/Writer.js';
+import writeSomethingToFile from "./com/Writer.js";
+import multer from "multer";
 import bodyParser from 'body-parser';
-//const sharp = import('sharp');
-import multer from 'multer';
-
+import { users } from "./users/users.js";
 
 // fileURLToPath is used because we are using module ES.
-
-
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const propertiesPath = path.resolve(__dirname, "../config.properties");
-import upload from './Storage/Storage.js'
-
+import upload from "./Storage/Storage.js";
+const userFileInfo = {
+  path: `./users/users.js`,
+  variableName: `users`,
+}
+const productsFileInfo = {
+  path: `./com/products.js`,
+  variableName: `products`,
+}
 
 const properties = PropertiesReader(propertiesPath);
 const port = properties.get("app.port");
@@ -32,15 +35,11 @@ app.use(cors());
 
 app.listen(port, () => {
   console.log("Server listen in " + port);
-  console.log("products", products);
-
 });
-
 
 //GET
 
 app.get("/products", (req, res) => {
-  //console.log("GET /products");
   res.status(200).json(products);
 });
 
@@ -77,15 +76,12 @@ app.post('/products', upload.single('image'),(req, res) => {
         writeProductsToFile(products);
     }
 
-    res.send({});
-
-})
+  res.send({});
+});
 app.post("/login", (req, res) => {
   console.log("POST /login");
 
   const { password, email } = req.body;
-
-  console.log(email, password);
 
   const user = users.find(
     (elem) => elem.email === String(email) && elem.password === String(password)
@@ -103,6 +99,42 @@ app.post("/login", (req, res) => {
     res.status(401).json({ message: "Invalid email or password" }); // Send error message
   }
 });
+
+app.post("/register", (req, res) => {
+  const { name, email, password, confirmPass } = req.body;
+  const [firstName, lastName] = String(name).split(" ");
+
+  if (!name || !email || !password || !confirmPass) {
+    return res
+      .status(400)
+      .json({ message: "Todos los campos son obligatorios" });
+  }
+
+  if (password !== confirmPass) {
+    return res.status(400).json({ message: "Las contraseñas no coinciden" });
+  }
+
+  const existingUser = users.find((elem) => elem.email === email);
+
+  if (existingUser) {
+    return res.status(400).json({ message: "El usuario ya existe" });
+  }
+
+  const newUser = {
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    password: password,
+  };
+
+  users.push(newUser);
+
+  writeSomethingToFile( userFileInfo.path, userFileInfo.variableName, users);
+
+  console.log("Usuario registrado:", newUser);
+
+  res.status(201).json({ message: "Usuario registrado exitosamente" });
+});
 //PATCH
 
 app.patch("/products/:id", (req, res) => {
@@ -111,7 +143,6 @@ app.patch("/products/:id", (req, res) => {
   const { id } = req.params;
   const body = req.body;
   console.log("body", body);
-
 
   const productIndex = products.findIndex((elem) => elem.id === Number(id));
 
@@ -126,17 +157,18 @@ app.patch("/products/:id", (req, res) => {
   for (const key in body) {
     product[key] = body[key];
   }
-  res.status(200).json({message: "Login successful" });
-  
 
+  products[productIndex] = product;
+  writeSomethingToFile( productsFileInfo.path, productsFileInfo.variableName, products);
+
+  res.status(200).json({ message: "Login successful" });
 });
 
 //PUT
 
-//DELETE  
+//DELETE
 
 app.delete("/products/:id", (req, res) => {
-
   const { id } = req.params;
   console.log("DELETE /products/:id", id);
 
@@ -147,11 +179,10 @@ app.delete("/products/:id", (req, res) => {
     return;
   }
 
-
-  console.log("Antes", products);
   products.splice(productIndex, 1);
+  writeSomethingToFile( productsFileInfo.path, productsFileInfo.variableName, products);
+
   console.log("Despues", products);
 
   res.status(200).json({ message: "Product successfully deleted" });
-
-})
+});
