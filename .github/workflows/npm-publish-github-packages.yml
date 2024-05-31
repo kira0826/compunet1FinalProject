@@ -16,13 +16,14 @@ jobs:
       - name: Install packages
         working-directory: frontend  # Especifica el directorio de trabajo
         run: npm install  
+
       - name: Bundle
-        working-directory: frontend  
+        working-directory: frontend 
+        run: npm run build  
+
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4
         with:
           branch: gh-pages
           folder: frontend/build
-
-        run: npm run build  
