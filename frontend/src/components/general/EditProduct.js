@@ -1,5 +1,3 @@
-import React from "react";
-import { InfoCell } from "../index.js";
 import { useState } from "react";
 import config from "../../config.json";
 

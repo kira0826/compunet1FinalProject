@@ -4,13 +4,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt } from "@fortawesome/free-regular-svg-icons"; // Importa el ícono de eliminación de FontAwesome
 import { Link } from "react-router-dom";
 import { Popup } from "../index.js";
+ import { useNavigate } from "react-router-dom";
+import { useCheckout, useCheckoutUpdate } from "../../CheckoutContext.js"; // importar car context
 import config from "../../config.json";
 
 function Product({ product, incrementCartCount }) {
   const [showPopup, setShowPopup] = useState(false);
   const user = useUser();
+  const navigate = useNavigate();
+  const updateCheckout = useCheckoutUpdate(); // funcion updateCheckout
   const { price, name, image, discount } = product;
-
   const total = price - Number(price) * discount;
 
   const handleDelete = () => {
@@ -49,6 +52,11 @@ function Product({ product, incrementCartCount }) {
       }
     }
   }, [user]);
+
+  const handleAddToCart = () => {
+    updateCheckout(product, 1); // anadimos product al carrito
+    incrementCartCount();
+  };
 
   return (
     <div className="bg-white shadow rounded overflow-hidden group">
@@ -102,7 +110,7 @@ function Product({ product, incrementCartCount }) {
       )}
       <a
         className="block w-full py-1 text-center  hover:cursor-pointer text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition"
-        onClick={incrementCartCount}
+        onClick={handleAddToCart}
       >
         Add to cart
       </a>
