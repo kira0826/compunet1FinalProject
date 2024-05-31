@@ -1,12 +1,10 @@
 import React from "react";
-import { LoginGetter } from "../components/index.js";
+import { LoginGetter, Logout } from "../components/index.js";
+import { useUser } from "../UserContext.js";
 
 function Login() {
-  return (
-    <div>
-      <LoginGetter />
-    </div>
-  );
+  const user = useUser();
+  return <div>{user ? <Logout /> : <LoginGetter />}</div>;
 }
 
 export default Login;

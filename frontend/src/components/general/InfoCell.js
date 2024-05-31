@@ -1,7 +1,7 @@
-import React from "react";
+import React, {useState} from "react";
 import { useUser } from "../../UserContext.js";
 
-function InfoCell({ title,type, placeholder }) {
+function InfoCell({ title,type, placeholder, onChange, name  }) {
   const userContext = useUser();
 
   return (
@@ -12,6 +12,8 @@ function InfoCell({ title,type, placeholder }) {
           type={type}
           placeholder={placeholder}
           className="h-8 w-auto"
+          onChange={onChange}
+          name={name}
         />
     </p>
   );

@@ -1,79 +1,128 @@
-import React from "react";
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { InfoCellRegister } from "../index.js";
+import config from "../../config.json";
+import {  useUserUpdate } from "../../UserContext.js";
+import { useNavigate } from "react-router-dom";
+
 
 function RegisterGetter() {
+  const navigate = useNavigate(); // Inicializa el hook de navegación
+
+  const setUser = useUserUpdate()
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPass: "",
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    console.log("cambio", name, value);
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      console.log("Datos: ", formData);
+
+      console.log("Datos con format", JSON.stringify(formData));
+
+      const response = await fetch(`${config["app.api"]}/register`, {
+         headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al realizar el registro.");
+      }
+
+      console.log("Usuario registrado con éxito.");
+
+      try {
+        const response = await fetch(config["app.api"] + "/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+  
+          body: JSON.stringify({ email:formData.email, password : formData.password }),
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data.user);
+  
+          localStorage.setItem("user", JSON.stringify(data));
+          
+          navigate("/");
+        } else {
+          const errorData = await response.json();
+          console.log(errorData);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+
+
+
+    } catch (error) {
+      console.error("Error al actualizar el producto:", error.message);
+    }
+  };
+
   return (
     <div className="contain py-16">
       <div className="max-w-lg mx-auto shadow px-6 py-7 rounded overflow-hidden">
-        <h2 className="text-2xl uppercase font-medium mb-1">Create an account</h2>
-        <p className="text-gray-600 mb-6 text-sm">Register htmlFor new cosutumer</p>
-        <form action="#" method="post" autoComplete="off">
+        <h2 className="text-2xl uppercase font-medium mb-1">
+          Create an account
+        </h2>
+        <p className="text-gray-600 mb-6 text-sm">
+          Register htmlFor new cosutumer
+        </p>
+        <form method="post" autoComplete="on" onSubmit={handleSubmit}>
           <div className="space-y-2">
-            <div>
-              <label htmlFor="name" className="text-gray-600 mb-2 block">
-                Full Name
-              </label>
-              <input
-                type="text"
-                name="name"
-                id="name"
-                className="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
-                placeholder="fulan fulana"
-              />
-            </div>
-            <div>
-              <label htmlFor="email" className="text-gray-600 mb-2 block">
-                Email address
-              </label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                className="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
-                placeholder="youremail.@domain.com"
-              />
-            </div>
-            <div>
-              <label htmlFor="password" className="text-gray-600 mb-2 block">
-                Password
-              </label>
-              <input
-                type="password"
-                name="password"
-                id="password"
-                className="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
-                placeholder="*******"
-              />
-            </div>
-            <div>
-              <label htmlFor="confirm" className="text-gray-600 mb-2 block">
-                Confirm password
-              </label>
-              <input
-                type="password"
-                name="confirm"
-                id="confirm"
-                className="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
-                placeholder="*******"
-              />
-            </div>
+            <InfoCellRegister
+              label="Full name"
+              type="text"
+              name="name"
+              placeholder="Ingrese su nombre completo"
+              onChange={handleInputChange}
+            />
+
+            <InfoCellRegister
+              label="Email"
+              type="email"
+              name="email"
+              placeholder="tuEmail@exmaple.com"
+              onChange={handleInputChange}
+            />
+
+            <InfoCellRegister
+              label="Password"
+              type="password"
+              name="password"
+              placeholder="********"
+              onChange={handleInputChange}
+            />
+
+            <InfoCellRegister
+              label="COnfirm password"
+              type="password"
+              name="confirmPass"
+              placeholder="********"
+              onChange={handleInputChange}
+            />
           </div>
-          <div className="mt-6">
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                name="aggrement"
-                id="aggrement"
-                className="text-primary focus:ring-0 rounded-sm cursor-pointer"
-              />
-              <label htmlFor="aggrement" className="text-gray-600 ml-3 cursor-pointer">
-                I have read and agree to the{" "}
-                <a href="#" className="text-primary">
-                  terms & conditions
-                </a>
-              </label>
-            </div>
-          </div>
+
           <div className="mt-4">
             <button
               type="submit"

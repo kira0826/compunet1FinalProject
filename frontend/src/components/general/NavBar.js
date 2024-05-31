@@ -1,8 +1,10 @@
 import React from "react";
 import { Link } from 'react-router-dom';
-
+import { useUser } from "../../UserContext.js";
 
 function NavBar({ }) {
+
+  const user = useUser();
   return (
     <nav className="bg-gray-800">
       <div className="container flex">
@@ -21,7 +23,8 @@ function NavBar({ }) {
           <Link to="/login"
             className="text-gray-200 hover:text-white transition"
           >
-            Login
+            { user ?  "Logout" : "Login" }
+            
           </Link>
         </div>
       </div>

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { UserProvider } from "./UserContext.js";
 import { CheckoutProvider } from "./CheckoutContext.js";
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 import {
   Home,
@@ -11,9 +12,11 @@ import {
   Profile,
   ProductInfo,
   Layout,
+  ProductForm
 } from "./pages/index.js";
 
 import "./components/fontAwesome.js";
+
 
 function App() {
   const [carCount, setCarCount] = useState(0);
@@ -35,7 +38,7 @@ function App() {
           <Layout carCount={carCount}>
             <Routes>
               <Route
-                path="/products"
+                path="/"
                 element={<Home incrementCartCount={incrementCartCount} />}
                 index
               />
@@ -46,7 +49,8 @@ function App() {
               <Route 
                 path="/products/:id" 
                 element={<ProductInfo incrementCartCount={incrementCartCount} />} 
-              /> 
+              />
+              <Route path="/productForm" element={<ProductForm incrementCartCount={incrementCartCount}/>} />
             </Routes>
           </Layout>
         </UserProvider>
