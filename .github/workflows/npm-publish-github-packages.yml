@@ -6,9 +6,9 @@ on:
       - kevin
 
 jobs:
-  build-and-deptloy:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
