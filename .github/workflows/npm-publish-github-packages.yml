@@ -3,11 +3,12 @@ name: Build and Deploy
 on:
   push:
     branches:
-      - main
+      - kevin
 
 jobs:
   build-and-deptloy:
     runs-on: ubuntu-latest
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -18,7 +19,7 @@ jobs:
       - name: Bundle
         working-directory: frontend  
 
-      -name: Deploy
+      - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4
         with:
           branch: gh-pages
