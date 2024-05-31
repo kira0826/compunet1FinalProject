@@ -72,7 +72,7 @@ function Receipt() {
                         className="text-primary">terms & conditions</a></label>
             </div>
 
-            <a href="#"
+            <a 
                 className="block w-full py-3 px-4 text-center text-white bg-primary border border-primary rounded-md hover:bg-transparent hover:text-primary transition font-medium">Place
                 order</a>
         </div>
