@@ -4,18 +4,19 @@ on:
   push:
     branches:
       - kevin
-
+permissions:
+  contents: write
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install packages
         working-directory: frontend  # Especifica el directorio de trabajo
-        run: npm install  
+        run: npm ci  
 
       - name: Bundle
         working-directory: frontend 
