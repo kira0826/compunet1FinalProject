@@ -22,9 +22,30 @@ export function CheckoutProvider({ children }) {
     if (cond == 1) {
         setCheckout([...checkout, product]);
     } else {
-        console.log()
-        console.log("entra a eliminar")
-        setCheckout(checkout.filter(item => item.id != product));
+      // no podemos hacer un filter porque seria
+      // por ID y, cuando hayan varios productos iguales
+      // se eliminarian todos los que tengan el mismo
+      // ID, no solo el seleccionado
+      var index = 0;
+
+      for (let i = 0; i < checkout.length; i++) {
+        if (checkout[i].id == product) {
+          break; 
+        }
+
+        index++;
+      }
+
+      checkout[index] = null;
+      var newCheckout = []
+
+      checkout.forEach(element => {
+        if (element != null) {
+          newCheckout.push(element)
+        }
+      });
+
+      setCheckout(newCheckout);
     }
   }
 

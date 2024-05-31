@@ -1,5 +1,6 @@
 import { useState } from "react";
 import config from "../../config.json";
+import InfoCell from "../general/InfoCell.js"
 
 function EditProduct({ product, image }) {
   const [formData, setFormData] = useState({
