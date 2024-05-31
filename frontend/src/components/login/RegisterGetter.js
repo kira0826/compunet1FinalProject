@@ -35,8 +35,7 @@ function RegisterGetter() {
       console.log("Datos con format", JSON.stringify(formData));
 
       const response = await fetch(`${config["app.api"]}/register`, {
-        method: "POST",
-        headers: {
+         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
