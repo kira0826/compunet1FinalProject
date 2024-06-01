@@ -40,13 +40,16 @@ function PurchaseHistory() {
         
         if (data.order ) {
           const formattedOrders = data.order.orders.flatMap((order) =>
-            order.products.map((product) => ({
-              idOrder: order.idOrder,
-              datePurchased: order.date,
-              productName: `${productsData.find((p) => p.id === product.idProduct).name}`, // Ajusta esto según los nombres de productos reales
-              quantity: product.quantity,
-              totalPrice: `${productsData.find((p) => p.id === product.idProduct).price * (1-productsData.find((p) => p.id === product.idProduct).discount)}`, // Ejemplo de precio, ajustar según sea necesario
-            }))
+            order.products.map((product) => {
+              const productData = productsData.find((p) => p.id === product.idProduct);
+              return {
+                idOrder: order.idOrder,
+                datePurchased: order.date,
+                productName: productData ? productData.name : "Unknown Product",
+                quantity: product.quantity,
+                totalPrice: productData ? productData.price * (1 - productData.discount) : 0,
+              };
+            })
           );
 
           setPurchaseHistory(formattedOrders);

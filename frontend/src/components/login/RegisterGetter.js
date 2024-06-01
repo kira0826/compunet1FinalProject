@@ -19,6 +19,8 @@ function RegisterGetter() {
     confirmPass: "",
   });
 
+  const [error, setError] = useState(null);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     console.log("cambio", name, value);
@@ -29,54 +31,33 @@ function RegisterGetter() {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
+
+    if (formData.password !== formData.confirmPass) {
+      setError("Passwords do not match.");
+      return;
+    }
 
     try {
-      console.log("Datos: ", formData);
-
-      console.log("Datos con format", JSON.stringify(formData));
-
       const response = await fetch(`${apiUrl}/register`, {
-         headers: {
+        method: "POST",
+        headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
-        throw new Error("Error al realizar el registro.");
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Error registering user.");
       }
 
-      console.log("Usuario registrado con éxito.");
-
-      try {
-        const response = await fetch(apiUrl + "/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-  
-          body: JSON.stringify({ email:formData.email, password : formData.password }),
-        });
-  
-        if (response.ok) {
-          const data = await response.json();
-          setUser(data.user);
-  
-          localStorage.setItem("user", JSON.stringify(data));
-          
-          navigate("/");
-        } else {
-          const errorData = await response.json();
-          console.log(errorData);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-
-
-
+      const data = await response.json();
+      setUser(data.user);
+      localStorage.setItem("user", JSON.stringify(data));
+      navigate("/");
     } catch (error) {
-      console.error("Error al actualizar el producto:", error.message);
+      setError(error.message);
     }
   };
 
