@@ -3,7 +3,7 @@ import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
 import PropertiesReader from "properties-reader";
-import { products } from "./com/products.js";
+//import { products } from "./com/products.js";
 import { orders } from "./com/OrderHistorials.js";
 import writeSomethingToFile from "./com/Writer.js";
 import { users } from "./users/users.js";
@@ -101,8 +101,12 @@ app.post("/products", upload.single("image"), async (req, res) => {
   const file = req.file;
   console.log("POST /products", req.body);
   const { body } = req;
+  
+  const count = await productsCollection.countDocuments();
+  const newProductId = count + 1;
+
   const newProduct = {
-    id: products.length + 1,
+    id: newProductId,
     stock: body.stock,
     image: body.image,
     discount: body.discount,
@@ -215,7 +219,6 @@ app.patch("/products/:id", upload.single("image"), async (req, res) => {
   const body = req.body;
   console.log("body", body);
 
-  const product = await productsCollection.findOne({ id: Number(id) });
   try {
     const result = await productsCollection.updateOne(
       { id: Number(id) },
