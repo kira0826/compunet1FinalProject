@@ -10,7 +10,7 @@ function LoginGetter() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate(); // Inicializa el hook de navegación
-  const apiUrl = process.env.NODE_ENV === 'production' ? process.env.URL_PROD : process.env.URL_LOCAL;
+  const apiUrl = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_URL_PROD : process.env.REACT_APP_URL_LOCAL;
 
 
   async function fetchUser(event) {

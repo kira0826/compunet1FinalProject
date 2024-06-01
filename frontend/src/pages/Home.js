@@ -8,11 +8,12 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../UserContext.js";
 
+
 function Home({ incrementCartCount }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const UserContext = useUser();
-  const apiUrl = process.env.NODE_ENV === 'production' ? process.env.URL_PROD : process.env.URL_LOCAL;
+  const apiUrl = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_URL_PROD : process.env.REACT_APP_URL_LOCAL;
 
 
   useEffect(() => {

@@ -1,17 +1,13 @@
+import fs from 'fs/promises';
 
-import fs from 'fs';
-import path from 'path';
-
-function writeSomethingToFile(pathFile, variableName, variable) {
-
-    const filePath = path.join(process.cwd(), pathFile);
-
-    console.log(filePath);  
-
-    const content = `const ${String(variableName)} = ${JSON.stringify(variable, null, 2)};\n\nexport { ${variableName} };`;
-    console.log(content);  
-
-    fs.writeFileSync(filePath, content, 'utf-8');
+async function writeSomethingToFile(path, variableName, data) {
+  try {
+    const fileContent = `export const ${variableName} = ${JSON.stringify(data, null, 2)};`;
+    await fs.writeFile(path, fileContent, 'utf8');
+  } catch (error) {
+    console.error("Error writing to file:", error);
+    throw error;
+  }
 }
 
 export default writeSomethingToFile;

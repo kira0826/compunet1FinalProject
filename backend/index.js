@@ -162,21 +162,25 @@ app.patch("/products/:id", (req, res) => {
 
 //DELETE
 
-app.delete("/products/:id", (req, res) => {
+app.delete("/products/:id", async (req, res) => {
   const { id } = req.params;
   console.log("DELETE /products/:id", id);
 
-  const productIndex = products.findIndex((elem) => elem.id === Number(id));
+  try {
+    const productIndex = products.findIndex((elem) => elem.id === Number(id));
 
-  if (productIndex === -1) {
-    res.status(404).json({ message: "Product not found" });
-    return;
+    if (productIndex === -1) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    products.splice(productIndex, 1);
+    await writeSomethingToFile(productsFileInfo.path, productsFileInfo.variableName, products);
+
+    console.log("Despues", products);
+
+    res.status(200).json({ message: "Product successfully deleted" });
+  } catch (error) {
+    console.error("Error deleting product:", error);
+    res.status(500).json({ message: "Internal Server Error", error: error.message });
   }
-
-  products.splice(productIndex, 1);
-  writeSomethingToFile( productsFileInfo.path, productsFileInfo.variableName, products);
-
-  console.log("Despues", products);
-
-  res.status(200).json({ message: "Product successfully deleted" });
 });

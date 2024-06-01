@@ -11,7 +11,7 @@ function ProductInfo({ incrementCartCount }) {
 
   const [product, setProduct] = useState(null);
   const [image, setImage] = useState(null);
-  const apiUrl = process.env.NODE_ENV === 'production' ? process.env.URL_PROD : process.env.URL_LOCAL;
+  const apiUrl = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_URL_PROD : process.env.REACT_APP_URL_LOCAL;
 
 
   useEffect(() => {

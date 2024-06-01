@@ -9,7 +9,7 @@ function RegisterGetter() {
   const navigate = useNavigate(); // Inicializa el hook de navegación
 
   const setUser = useUserUpdate()
-  const apiUrl = process.env.NODE_ENV === 'production' ? process.env.URL_PROD : process.env.URL_LOCAL;
+  const apiUrl = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_URL_PROD : process.env.REACT_APP_URL_LOCAL;
 
 
   const [formData, setFormData] = useState({
