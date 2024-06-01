@@ -44,7 +44,6 @@ app.get("/products", (req, res) => {
 app.get("/products/:id", (req, res) => {
   const { id } = req.params;
   console.log("GET /products/:id", id);
-
   const product = products.find((elem) => elem.id === Number(id));
   res.status(200).json({ product, message: "product successfully got." });
 });
@@ -124,13 +123,13 @@ app.post("/register", (req, res) => {
   };
 
   users.push(newUser);
-
   writeSomethingToFile( userFileInfo.path, userFileInfo.variableName, users);
 
   console.log("Usuario registrado:", newUser);
 
   res.status(201).json({ message: "Usuario registrado exitosamente" });
 });
+
 //PATCH
 
 app.patch("/products/:id", upload.single('image'), (req, res) => {
@@ -163,6 +162,25 @@ app.patch("/products/:id", upload.single('image'), (req, res) => {
 });
 
 //PUT
+app.put("/products/:id", (req, res) => {
+  const { id } = req.params;
+
+  console.log("PUT /products/:id", id)
+
+  const updatedProduct = req.body;
+
+  console.log("producto upd: " + updatedProduct.stock)
+
+  const productIndex = products.findIndex((elem) => elem.id === Number(id));
+
+  if (productIndex !== -1) {
+    products[productIndex] = { ...products[productIndex], ...updatedProduct };
+    res.status(200).json({ product: products[productIndex], message: "Product successfully updated." });
+  } else {
+    res.status(404).json({ message: "Product not found." });
+  }
+})
+
 
 //DELETE
 

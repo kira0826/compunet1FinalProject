@@ -1,7 +1,6 @@
-import React from "react";
-import { InfoCell } from "../index.js";
 import { useState } from "react";
 import config from "../../config.json";
+import InfoCell from "../general/InfoCell.js"
 
 function EditProduct({ product, image }) {
   async function convertToBase64(file) {
