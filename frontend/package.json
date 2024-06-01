@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "homepage": "https://kira0826.github.io/compunet1FinalProject",
+  
   "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:18900",
