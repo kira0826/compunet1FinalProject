@@ -14,6 +14,9 @@ function Product({ product, incrementCartCount }) {
   const navigate = useNavigate();
   const updateCheckout = useCheckoutUpdate(); // funcion updateCheckout
   const { price, name, image, discount } = product;
+  const apiUrl = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_URL_PROD : process.env.REACT_APP_URL_LOCAL;
+
+
   const total = price - Number(price) * discount;
 
   const handleDelete = () => {
@@ -21,9 +24,10 @@ function Product({ product, incrementCartCount }) {
   };
 
   const handleConfirmDelete = () => {
+    console.log("Eliminando producto");
     async function deleteProduct() {
       const response = await fetch(
-        config["app.api"] + "/products/" + product.id,
+        apiUrl + "/products/" + product.id,
         {
           method: "DELETE",
           headers: {
@@ -35,13 +39,15 @@ function Product({ product, incrementCartCount }) {
         console.log("Producto eliminado");
       }
     }
-    deleteProduct();  
-    setShowPopup(false);
-    window.location.reload(); 
+    deleteProduct().then(() => {
+      setShowPopup(false);
+      window.location.reload();
+    });
 
   };
 
   const handleCancelDelete = () => {
+    console.log("Cancelando eliminación");
     setShowPopup(false);
   };
 

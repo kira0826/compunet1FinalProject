@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import ImageUploader from "./ImageUploader.js";
 import config from "../../config.json";
-import Compressor from "compressorjs";
-//import sharp from "sharp";
 
 function NewProduct() {
   const [productName, setProductName] = useState("");
@@ -15,6 +13,7 @@ function NewProduct() {
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
 
+  const apiUrl = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_URL_PROD : process.env.REACT_APP_URL_LOCAL;
 
   async function convertToBase64(file) {
     return new Promise((resolve, reject) => {
@@ -23,6 +22,7 @@ function NewProduct() {
       reader.onerror = (error) => reject(error);
       reader.readAsDataURL(file);
     });
+
   }
 
   const handleSubmit = async (e) => {
@@ -40,7 +40,7 @@ function NewProduct() {
     formData2.append("image", imageURL);
     formData2.append("description", description);
     try {
-      await fetch(config["app.api"] + "/products", {
+      await fetch(apiUrl + "/products", {
         method: "POST",
         body: formData2,
       });

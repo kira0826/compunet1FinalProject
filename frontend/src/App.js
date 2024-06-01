@@ -20,6 +20,8 @@ import "./components/fontAwesome.js";
 
 
 function App() {
+
+
   const [carCount, setCarCount] = useState(0);
 
   const incrementCartCount = () => {

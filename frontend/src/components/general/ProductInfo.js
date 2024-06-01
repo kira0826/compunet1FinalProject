@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useUser } from "../../UserContext.js";
 import { ClientProductInfo, EditProduct,ImageUploader } from "../index.js";
 import { useParams } from "react-router-dom";
-import config from "../../config.json";
 
 function ProductInfo({ incrementCartCount }) {
   const userContext = useUser();
@@ -12,10 +11,12 @@ function ProductInfo({ incrementCartCount }) {
 
   const [product, setProduct] = useState(null);
   const [image, setImage] = useState(null);
+  const apiUrl = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_URL_PROD : process.env.REACT_APP_URL_LOCAL;
+
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const response = await fetch(config["app.api"] + "/products/" + id, {
+      const response = await fetch( apiUrl+ "/products/" + id, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

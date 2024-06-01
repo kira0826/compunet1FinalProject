@@ -55,6 +55,8 @@ function EditProduct({ product, image }) {
       console.log("No se han realizado cambios.");
       return;
     }
+    const apiUrl = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_URL_PROD : process.env.REACT_APP_URL_LOCAL;
+    
     console.log("Image recibida para 64", formData.image);
     console.log("Image en FM", formData.image);
     const formData2 = new FormData();
@@ -75,8 +77,15 @@ function EditProduct({ product, image }) {
     ///////////////////////////////////////
 
     /*try {
+
+    try {
+
+      const apiUrl = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_URL_PROD : process.env.REACT_APP_URL_LOCAL;
+
       const response = await fetch(
-        `${config["app.api"]}/products/${product.id}`,
+
+        
+        `${apiUrl}/products/${product.id}`,
         {
           method: "PATCH",
           headers: {
