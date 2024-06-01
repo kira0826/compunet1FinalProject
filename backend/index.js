@@ -13,7 +13,7 @@ import { users } from "./users/users.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const propertiesPath = path.resolve(__dirname, "../config.properties");
+const propertiesPath = path.resolve(__dirname, "./config.properties");
 import upload from "./Storage/Storage.js";
 const userFileInfo = {
   path: `./users/users.js`,
@@ -25,7 +25,7 @@ const productsFileInfo = {
 }
 
 const properties = PropertiesReader(propertiesPath);
-const port = properties.get("app.port");
+const port = process.env.PORT || properties.get("app.port");
 
 const app = express();
 app.use(express.json());
