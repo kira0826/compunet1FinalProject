@@ -1,12 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import { useCheckout, useCheckoutUpdate } from "../../CheckoutContext.js";
 import { useUser } from "../../UserContext.js";
+import Popup from "../general/Popup.js";
 
 // substractCar -> func que viene de checkout
 // para restarle cantidad al carrito cada vez
 // que quite un producto
 function Receipt({ substractCart }) {
-  const apiUrl = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_URL_PROD : process.env.REACT_APP_URL_LOCAL;
+  const [showPopup, setShowPopup] = useState(false);
+
+  const handleCancelDelete = () => {
+    console.log("Cancelando popup");
+    setShowPopup(false);
+  };
+
+  const handleConfirmDelete = () => {
+    console.log("confirmar popup");
+    setShowPopup(false);
+  };
+  const apiUrl =
+    process.env.NODE_ENV === "production"
+      ? process.env.REACT_APP_URL_PROD
+      : process.env.REACT_APP_URL_LOCAL;
   const user = useUser();
   const updateCheckout = useCheckoutUpdate(); // funcion updateCheckout
 
@@ -48,71 +63,75 @@ function Receipt({ substractCart }) {
   };
 
   const handlePlaceOrderClick = async () => {
-    let tempProducts = checkout;
-    console.log("Productos en el carrito:", tempProducts);
-    const orderData = {
-      idUser: user.email,
-      orders: {
-        date: new Date().toISOString().split("T")[0],
-        products: tempProducts.map((product) => ({
-          idProduct: product.id,
-          quantity: 1, // Ajustar la cantidad según sea necesario
-        })),
-      },
-    };
-
-    console.log("Datos de la orden:", orderData);
-    if (tempProducts.length > 0) {
-      try {
-        const response = await fetch(apiUrl + "/order", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
+    if (user) {
+      let tempProducts = checkout;
+      console.log("Productos en el carrito:", tempProducts);
+      if (tempProducts.length === 0) {
+        setShowPopup(true);
+      } else {
+        const orderData = {
+          idUser: user.email,
+          orders: {
+            date: new Date().toISOString().split("T")[0],
+            products: tempProducts.map((product) => ({
+              idProduct: product.id,
+              quantity: 1, // Ajustar la cantidad según sea necesario
+            })),
           },
-          body: JSON.stringify(orderData),
-        });
+        };
 
-        if (!response.ok) {
-          throw new Error("Error al crear la orden");
-        }
+        console.log("Datos de la orden:", orderData);
+        if (tempProducts.length > 0) {
+          try {
+            const response = await fetch(apiUrl + "/order", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(orderData),
+            });
 
-        // Si la creación es exitosa, vaciar el carrito
-        //checkout.forEach((product) => substractCart());
-        console.log("Orden creada exitosamente");
-      } catch (error) {
-        console.error("Error al crear la orden:", error);
-      }
-    }
-    for (const product of checkout) {
-      const updatedProduct = { ...product, stock: product.stock - 1 };
-      const changedValues = {};
-      changedValues["stock"] = updatedProduct.stock;
-      const formData = new FormData();
-      formData.append("stock", updatedProduct.stock);
-      try {
-        const response = await fetch(
-          apiUrl+ "/products/" + product.id,
-          {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(changedValues),
+            if (!response.ok) {
+              throw new Error("Error al crear la orden");
+            }
+
+            // Si la creación es exitosa, vaciar el carrito
+            //checkout.forEach((product) => substractCart());
+            console.log("Orden creada exitosamente");
+          } catch (error) {
+            console.error("Error al crear la orden:", error);
           }
-        );
-
-        if (!response.ok) {
-          throw new Error("Error al actualizar el producto");
         }
+        for (const product of checkout) {
+          const updatedProduct = { ...product, stock: product.stock - 1 };
+          const changedValues = {};
+          changedValues["stock"] = updatedProduct.stock;
+          const formData = new FormData();
+          formData.append("stock", updatedProduct.stock);
+          try {
+            const response = await fetch(apiUrl + "/products/" + product.id, {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(changedValues),
+            });
 
-        // Si la actualización es exitosa, actualiza localmente el checkout
-        substractCart();
-        updateCheckout(product.id, updatedProduct.stock);
-      } catch (error) {
-        console.error("Error al actualizar el producto:", error);
+            if (!response.ok) {
+              throw new Error("Error al actualizar el producto");
+            }
+
+            // Si la actualización es exitosa, actualiza localmente el checkout
+            substractCart();
+            updateCheckout(product.id, updatedProduct.stock);
+          } catch (error) {
+            console.error("Error al actualizar el producto:", error);
+          }
+        }
       }
+    } else {
+      setShowPopup(true);
     }
-
   };
 
   return (
@@ -180,6 +199,13 @@ function Receipt({ substractCart }) {
       >
         Place order
       </a>
+      {showPopup && (
+        <Popup
+          message="Por favor, valide que tiene una sesión activa y productos en el carrito"
+          onConfirm={handleConfirmDelete}
+          onCancel={handleCancelDelete}
+        />
+      )}
     </div>
   );
 }
