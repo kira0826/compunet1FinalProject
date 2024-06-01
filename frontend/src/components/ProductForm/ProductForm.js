@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ImageUploader from "./ImageUploader.js";
-import config from "../../config.json";
+
 
 function NewProduct() {
   const [productName, setProductName] = useState("");

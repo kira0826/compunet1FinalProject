@@ -13,7 +13,7 @@ import multer from "multer";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const propertiesPath = path.resolve(__dirname, "../config.properties");
+const propertiesPath = path.resolve(__dirname, "./config.properties");
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });

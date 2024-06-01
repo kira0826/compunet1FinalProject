@@ -6,9 +6,10 @@ import { Link } from "react-router-dom";
 import { Popup } from "../index.js";
  import { useNavigate } from "react-router-dom";
 import { useCheckout, useCheckoutUpdate } from "../../CheckoutContext.js"; // importar car context
-import config from "../../config.json";
+
 
 function Product({ product, incrementCartCount }) {
+  
   const [showPopup, setShowPopup] = useState(false);
   const user = useUser();
   const navigate = useNavigate();

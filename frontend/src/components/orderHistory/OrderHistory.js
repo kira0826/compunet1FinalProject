@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import config from "../../config.json";
 import { useUser } from "../../UserContext.js";
 
 function PurchaseHistory() {
+  const apiUrl = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_URL_PROD : process.env.REACT_APP_URL_LOCAL;
   const [purchaseHistory, setPurchaseHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const user = useUser();
@@ -15,7 +15,7 @@ function PurchaseHistory() {
       }
 
       try {
-        const productsResponse = await fetch(config["app.api"] + "/products", {
+        const productsResponse = await fetch(apiUrl + "/products", {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
@@ -25,7 +25,7 @@ function PurchaseHistory() {
         const productsData = await productsResponse.json();
 
         const response = await fetch(
-          `${config["app.api"]}/orderHistory/${user.email}`,
+          `${apiUrl}/orderHistory/${user.email}`,
           {
             method: "GET",
             headers: {

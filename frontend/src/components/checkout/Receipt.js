@@ -1,12 +1,12 @@
 import React from "react";
 import { useCheckout, useCheckoutUpdate } from "../../CheckoutContext.js";
 import { useUser } from "../../UserContext.js";
-import config from "../../config.json";
 
 // substractCar -> func que viene de checkout
 // para restarle cantidad al carrito cada vez
 // que quite un producto
 function Receipt({ substractCart }) {
+  const apiUrl = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_URL_PROD : process.env.REACT_APP_URL_LOCAL;
   const user = useUser();
   const updateCheckout = useCheckoutUpdate(); // funcion updateCheckout
 
@@ -64,7 +64,7 @@ function Receipt({ substractCart }) {
     console.log("Datos de la orden:", orderData);
     if (tempProducts.length > 0) {
       try {
-        const response = await fetch(config["app.api"] + "/order", {
+        const response = await fetch(apiUrl + "/order", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -91,7 +91,7 @@ function Receipt({ substractCart }) {
       formData.append("stock", updatedProduct.stock);
       try {
         const response = await fetch(
-          config["app.api"] + "/products/" + product.id,
+          apiUrl+ "/products/" + product.id,
           {
             method: "PATCH",
             headers: {

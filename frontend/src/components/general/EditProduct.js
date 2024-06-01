@@ -1,8 +1,8 @@
 import { useState } from "react";
-import config from "../../config.json";
 import InfoCell from "../general/InfoCell.js"
 
 function EditProduct({ product, image }) {
+  const apiUrl = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_URL_PROD : process.env.REACT_APP_URL_LOCAL;
   async function convertToBase64(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -55,7 +55,7 @@ function EditProduct({ product, image }) {
       console.log("No se han realizado cambios.");
       return;
     }
-    const apiUrl = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_URL_PROD : process.env.REACT_APP_URL_LOCAL;
+   
     
     console.log("Image recibida para 64", formData.image);
     console.log("Image en FM", formData.image);
@@ -105,7 +105,7 @@ function EditProduct({ product, image }) {
     }*/
     try {
       const response = await fetch(
-        `${config["app.api"]}/products/${product.id}`,
+        `${apiUrl}/products/${product.id}`,
         {
           method: "PATCH",
           body: formData2,

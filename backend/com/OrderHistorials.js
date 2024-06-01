@@ -1,4 +1,4 @@
-const orders = [
+export const orders = [
   {
     "idUser": "john.doe@gmail.com",
     "orders": [
@@ -247,9 +247,17 @@ const orders = [
             "quantity": 1
           }
         ]
+      },
+      {
+        "idOrder": 24,
+        "date": "2024-06-01",
+        "products": [
+          {
+            "idProduct": 1,
+            "quantity": 1
+          }
+        ]
       }
     ]
   }
 ];
-
-export { orders };
