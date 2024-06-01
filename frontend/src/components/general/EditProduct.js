@@ -1,7 +1,6 @@
 import React from "react";
 import { InfoCell } from "../index.js";
 import { useState } from "react";
-import config from "../../config.json";
 
 function EditProduct({ product, image }) {
   const [formData, setFormData] = useState({
@@ -42,8 +41,13 @@ function EditProduct({ product, image }) {
     }
 
     try {
+
+      const apiUrl = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_API_URL_PROD : process.env.REACT_APP_API_URL_LOCAL;
+
       const response = await fetch(
-        `${config["app.api"]}/products/${product.id}`,
+
+        
+        `${apiUrl}/products/${product.id}`,
         {
           method: "PATCH",
           headers: {

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { InfoCellRegister } from "../index.js";
-import config from "../../config.json";
 import {  useUserUpdate } from "../../UserContext.js";
 import { useNavigate } from "react-router-dom";
 
@@ -10,6 +9,8 @@ function RegisterGetter() {
   const navigate = useNavigate(); // Inicializa el hook de navegación
 
   const setUser = useUserUpdate()
+  const apiUrl = process.env.NODE_ENV === 'production' ? process.env.URL_PROD : process.env.URL_LOCAL;
+
 
   const [formData, setFormData] = useState({
     name: "",
@@ -34,7 +35,7 @@ function RegisterGetter() {
 
       console.log("Datos con format", JSON.stringify(formData));
 
-      const response = await fetch(`${config["app.api"]}/register`, {
+      const response = await fetch(`${apiUrl}/register`, {
          headers: {
           "Content-Type": "application/json",
         },
@@ -48,7 +49,7 @@ function RegisterGetter() {
       console.log("Usuario registrado con éxito.");
 
       try {
-        const response = await fetch(config["app.api"] + "/login", {
+        const response = await fetch(apiUrl + "/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import ImageUploader from "./ImageUploader.js";
-import config from "../../config.json";
 
 function NewProduct() {
   const [productName, setProductName] = useState("");
@@ -14,6 +13,8 @@ function NewProduct() {
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const apiUrl = process.env.NODE_ENV === 'production' ? process.env.URL_PROD : process.env.URL_LOCAL;
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,7 +34,7 @@ function NewProduct() {
         description,
       };
 
-      const response = await fetch(config["app.api"] + "/products", {
+      const response = await fetch(apiUrl+ "/products", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -49,7 +50,7 @@ function NewProduct() {
     imageData.append("image", image);
     console.log("Image data:", imageData);
     try {
-      await fetch(config["app.api"] + "/products", {
+      await fetch(apiUrl + "/products", {
         method: "POST",
         body: imageData,
       });

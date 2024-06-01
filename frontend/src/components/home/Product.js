@@ -4,12 +4,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt } from "@fortawesome/free-regular-svg-icons"; // Importa el ícono de eliminación de FontAwesome
 import { Link } from "react-router-dom";
 import { Popup } from "../index.js";
-import config from "../../config.json";
 
 function Product({ product, incrementCartCount }) {
   const [showPopup, setShowPopup] = useState(false);
   const user = useUser();
   const { price, name, image, discount } = product;
+  const apiUrl = process.env.NODE_ENV === 'production' ? process.env.URL_PROD : process.env.URL_LOCAL;
+
 
   const total = price - Number(price) * discount;
 
@@ -20,7 +21,7 @@ function Product({ product, incrementCartCount }) {
   const handleConfirmDelete = () => {
     async function deleteProduct() {
       const response = await fetch(
-        config["app.api"] + "/products/" + product.id,
+        apiUrl + "/products/" + product.id,
         {
           method: "DELETE",
           headers: {

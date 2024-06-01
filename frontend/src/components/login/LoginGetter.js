@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import config from "../../config.json";
 import { useUser, useUserUpdate } from "../../UserContext.js";
 
 function LoginGetter() {
@@ -11,13 +10,14 @@ function LoginGetter() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate(); // Inicializa el hook de navegación
+  const apiUrl = process.env.NODE_ENV === 'production' ? process.env.URL_PROD : process.env.URL_LOCAL;
 
 
   async function fetchUser(event) {
     event.preventDefault();
 
     try {
-      const response = await fetch(config["app.api"] + "/login", {
+      const response = await fetch(apiUrl+ "/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
