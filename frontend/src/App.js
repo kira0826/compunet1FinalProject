@@ -26,7 +26,7 @@ function App() {
   };
 
   return (
-    <Router>
+    <Router basename="/compunet1FinalProject"  >
       <UserProvider>
         <Layout carCount={carCount}>
           <Routes>
