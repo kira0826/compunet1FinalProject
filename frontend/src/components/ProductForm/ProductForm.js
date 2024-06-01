@@ -14,8 +14,7 @@ function NewProduct() {
   const [quantity, setQuantity] = useState(1);
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+
 
   async function convertToBase64(file) {
     return new Promise((resolve, reject) => {
@@ -28,65 +27,8 @@ function NewProduct() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    try {
-      setLoading(true);
-
-      let imageURL = await convertToBase64(image);
-      console.log("Image URL OG:", imageURL);
-      const formData2 = new FormData();
-      formData2.append("name", productName);
-      formData2.append("brand", brand);
-      formData2.append("category", category);
-      formData2.append("sku", sku);
-      formData2.append("price", price);
-      formData2.append("discount", discount);
-      formData2.append("stock", quantity);
-      formData2.append("image", imageURL);
-      formData2.append("description", description);
-
-      const formData = {
-        name: productName,
-        brand,
-        category,
-        sku: parseInt(sku),
-        price: parseFloat(price),
-        discount: parseFloat(discount),
-        stock: parseInt(quantity),
-        image: imageURL,
-        description,
-      };
-
-      const response = await fetch(config["app.api"] + "/products", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData2),
-      });
-    } catch (error) {
-      setError("Error creating product");
-      setLoading(false);
-    }
-
-    let newImage;
-
-    new Compressor(image, {
-      quality: 0.2, // Ajusta la calidad de la imagen comprimida (0.6 es un valor por defecto)
-      maxWidth: 800, // Ajusta el ancho máximo de la imagen
-      success(result) {
-        newImage = result;
-      },
-      error(err) {
-        console.error("Error al comprimir la imagen:", err);
-      },
-    });
-
     let imageURL = await convertToBase64(image);
     console.log("Image URL new:", imageURL);
-    //const imageData = new FormData();
-    //imageData.append("image", image);
-    //console.log("Image data:", imageData);
     const formData2 = new FormData();
     formData2.append("name", productName);
     formData2.append("brand", brand);
@@ -100,24 +42,12 @@ function NewProduct() {
     try {
       await fetch(config["app.api"] + "/products", {
         method: "POST",
-        headers: {},
         body: formData2,
       });
     } catch (error) {
       console.error("Error al enviar los datos del producto:", error);
     }
   };
-
-  const prod = {
-    productName,
-    brand,
-    category,
-    sku,
-    price,
-    quantity,
-    description,
-  };
-  console.log("Producto creado:", prod);
 
   return (
     <div className="container grid grid-cols-2 gap-6 pt-4 mt-4">

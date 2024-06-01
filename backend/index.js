@@ -5,8 +5,6 @@ import { fileURLToPath } from "url";
 import PropertiesReader from "properties-reader";
 import { products } from "./com/products.js";
 import writeSomethingToFile from "./com/Writer.js";
-import multer from "multer";
-import bodyParser from 'body-parser';
 import { users } from "./users/users.js";
 
 // fileURLToPath is used because we are using module ES.
@@ -57,11 +55,9 @@ app.post('/products', upload.single('image'),(req, res) => {
     const file = req.file;
     console.log("POST /products", req.body);
     const {body} = req;
-    //const image = './Storage/imgs' + req.file.originalname
     const newProduct = {
         id: products.length + 1, 
         stock: body.stock,
-        //image: "./Storage/imgs/" + body.image,
         image: body.image,
         discount: body.discount,
         category: body.category,
@@ -73,7 +69,7 @@ app.post('/products', upload.single('image'),(req, res) => {
     console.log("newProduct", newProduct);
     if (newProduct.name != null){
         products.push(newProduct);
-        writeProductsToFile(products);
+        writeSomethingToFile(productsFileInfo.path, productsFileInfo.variableName, products);
     }
 
   res.send({});
@@ -137,7 +133,7 @@ app.post("/register", (req, res) => {
 });
 //PATCH
 
-app.patch("/products/:id", (req, res) => {
+app.patch("/products/:id", upload.single('image'), (req, res) => {
   console.log("PATCH /EditProduct");
 
   const { id } = req.params;
@@ -156,10 +152,12 @@ app.patch("/products/:id", (req, res) => {
 
   for (const key in body) {
     product[key] = body[key];
+    console.log("key", key ,body[key]);
   }
 
   products[productIndex] = product;
-  writeSomethingToFile( productsFileInfo.path, productsFileInfo.variableName, products);
+  console.log("Despues", products[productIndex]);
+  //writeSomethingToFile( productsFileInfo.path, productsFileInfo.variableName, products);
 
   res.status(200).json({ message: "Login successful" });
 });

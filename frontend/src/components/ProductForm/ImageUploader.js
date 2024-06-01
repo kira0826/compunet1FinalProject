@@ -1,23 +1,15 @@
 import React, { useState } from "react";
-import Compressor from "compressorjs";
 
 function NewImage({ setImageExt, imagePreview }) {
   const [image, setImage] = useState(null);
 
-  console.log(imagePreview);
+  console.log("ImagePreview ", imagePreview);
 
   const handleImageChange = (e) => {
-    new Compressor(e.target.files[0], {
-      quality: 0.2, // Ajusta la calidad de la imagen comprimida (0.6 es un valor por defecto)
-      maxWidth: 800, // Ajusta el ancho máximo de la imagen
-      success(result) {
-        setImageExt(result);
-        setImage(result);
-      },
-      error(err) {
-        console.error("Error al comprimir la imagen:", err);
-      },
-    });
+    console.log("Image IF");
+    console.log("image", image);
+    setImageExt(e.target.files[0]);
+    setImage(e.target.files[0]);
   };
 
   return (

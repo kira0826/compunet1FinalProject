@@ -4,6 +4,17 @@ import { useState } from "react";
 import config from "../../config.json";
 
 function EditProduct({ product, image }) {
+  async function convertToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  console.log("Image en EP", image);
+
   const [formData, setFormData] = useState({
     name: product.name,
     stock: product.stock,
@@ -13,7 +24,7 @@ function EditProduct({ product, image }) {
     price: product.price,
     description: product.description,
     discount: product.discount,
-    image:image,
+    image: image,
   });
 
   const handleInputChange = (e) => {
@@ -40,8 +51,22 @@ function EditProduct({ product, image }) {
       console.log("No se han realizado cambios.");
       return;
     }
+    console.log("Image recibida para 64", formData.image);
+    let imageURL = await convertToBase64(image);
+    console.log("Image en FM", formData.image);
+    const formData2 = new FormData();
+    formData2.append("name", formData.name);
+    formData2.append("brand", formData.brand);
+    formData2.append("category", formData.category);
+    formData2.append("sku", formData.id);
+    formData2.append("price", formData.price);
+    formData2.append("discount", formData.discount);
+    formData2.append("stock", formData.stock);
+    formData2.append("image", imageURL);
+    formData2.append("description", formData.description);
+    ///////////////////////////////////////
 
-    try {
+    /*try {
       const response = await fetch(
         `${config["app.api"]}/products/${product.id}`,
         {
@@ -60,6 +85,22 @@ function EditProduct({ product, image }) {
       console.log("Producto actualizado con éxito.");
     } catch (error) {
       console.error("Error al actualizar el producto:", error.message);
+    }*/
+    try {
+      const response = await fetch(
+        `${config["app.api"]}/products/${product.id}`,
+        {
+          method: "PATCH",
+          body: formData2,
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Error al realizar la actualización del producto.");
+      }
+
+      console.log("Producto actualizado con éxito."); 
+    } catch (error) {
+      console.error("Error al enviar los datos del producto:", error.message);
     }
   };
 
