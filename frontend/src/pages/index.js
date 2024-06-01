@@ -6,3 +6,4 @@ export { default as Checkout } from "./Checkout.js";
 export { default as Profile } from "./Profile.js";
 export { default as ProductInfo} from "./ProductInfo.js";
 export { default as ProductForm } from "./ProductForm.js";
+export { default as OrderHistory } from "./OrderHistory.js";

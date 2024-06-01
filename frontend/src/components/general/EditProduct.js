@@ -43,26 +43,35 @@ function EditProduct({ product, image }) {
     for (const key in formData) {
       if (formData[key] !== product[key] && formData[key] !== "") {
         changedValues[key] = formData[key];
+        console.log("cambio", key, formData[key]);
       }
     }
 
+    if (image instanceof Blob) {
+      changedValues["image"] = image;
+    }
+    
     if (Object.keys(changedValues).length === 0) {
       console.log("No se han realizado cambios.");
       return;
     }
     console.log("Image recibida para 64", formData.image);
-    let imageURL = await convertToBase64(image);
     console.log("Image en FM", formData.image);
     const formData2 = new FormData();
-    formData2.append("name", formData.name);
-    formData2.append("brand", formData.brand);
-    formData2.append("category", formData.category);
-    formData2.append("sku", formData.id);
-    formData2.append("price", formData.price);
-    formData2.append("discount", formData.discount);
-    formData2.append("stock", formData.stock);
-    formData2.append("image", imageURL);
-    formData2.append("description", formData.description);
+    Object.keys(changedValues).forEach(key => {
+      formData2.append(key, changedValues[key]);
+    });
+    
+    if (image instanceof Blob) {
+      console.log("Image dentro del IF");
+      let imageURL = await convertToBase64(image);
+      formData2.append("image", imageURL);
+      
+      console.log("FormData2 a continuación");
+      for (let [key, value] of formData2.entries()) {
+        console.log(`${key}: ${value}`);
+      }
+    }
     ///////////////////////////////////////
 
     /*try {

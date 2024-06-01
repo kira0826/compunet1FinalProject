@@ -21,3 +21,4 @@ export {default as InfoCellRegister} from "./login/InfoCellRegister.js";
 export { default as NewProdButton } from "./home/NewProdButton.js";
 export { default as ProductForm } from "./ProductForm/ProductForm.js";
 export { default as ImageUploader } from "./ProductForm/ImageUploader.js";
+export { default as OrderHistory } from "./orderHistory/OrderHistory.js";  

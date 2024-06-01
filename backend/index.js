@@ -4,23 +4,36 @@ import path from "path";
 import { fileURLToPath } from "url";
 import PropertiesReader from "properties-reader";
 import { products } from "./com/products.js";
+import { orders } from "./com/OrderHistorials.js";
 import writeSomethingToFile from "./com/Writer.js";
 import { users } from "./users/users.js";
+import multer from "multer";
 
 // fileURLToPath is used because we are using module ES.
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const propertiesPath = path.resolve(__dirname, "../config.properties");
-import upload from "./Storage/Storage.js";
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+//import upload from "./Storage/Storage.js";
+
+
+
 const userFileInfo = {
   path: `./users/users.js`,
   variableName: `users`,
-}
+};
 const productsFileInfo = {
   path: `./com/products.js`,
   variableName: `products`,
-}
+};
+
+const ordersFileInfo = {
+  path: `./com/OrderHistorials.js`,
+  variableName: `orders`,
+};
 
 const properties = PropertiesReader(propertiesPath);
 const port = properties.get("app.port");
@@ -29,7 +42,6 @@ const url = properties.get("app.url");
 const app = express();
 app.use(express.json());
 app.use(cors());
-
 
 app.listen(port, () => {
   console.log("Server listen in " + port);
@@ -44,35 +56,71 @@ app.get("/products", (req, res) => {
 app.get("/products/:id", (req, res) => {
   const { id } = req.params;
   console.log("GET /products/:id", id);
+
   const product = products.find((elem) => elem.id === Number(id));
   res.status(200).json({ product, message: "product successfully got." });
 });
 
+app.get("/orderHistory/:idUser", (req, res) => {
+  const { idUser } = req.params;
+  console.log("GET /orderHistory/:idUser", idUser);
+
+  const order = orders.find((elem) => elem.idUser === idUser);
+  console.log("order", order);
+  res.status(200).json({ order, message: "order successfully got." });
+});
+
 //POST
 
-app.post('/products', upload.single('image'),(req, res) => {
-    const file = req.file;
-    console.log("POST /products", req.body);
-    const {body} = req;
-    const newProduct = {
-        id: products.length + 1, 
-        stock: body.stock,
-        image: body.image,
-        discount: body.discount,
-        category: body.category,
-        brand: body.brand,
-        name: body.name,
-        price: body.price,
-        description: body.description
-    };
-    console.log("newProduct", newProduct);
-    if (newProduct.name != null){
-        products.push(newProduct);
-        writeSomethingToFile(productsFileInfo.path, productsFileInfo.variableName, products);
-    }
+app.post("/products", upload.single("image"), (req, res) => {
+  const file = req.file;
+  console.log("POST /products", req.body);
+  const { body } = req;
+  const newProduct = {
+    id: products.length + 1,
+    stock: body.stock,
+    image: body.image,
+    discount: body.discount,
+    category: body.category,
+    brand: body.brand,
+    name: body.name,
+    price: body.price,
+    description: body.description,
+  };
+  console.log("newProduct", newProduct);
+  if (newProduct.name != null) {
+    products.push(newProduct);
+    writeSomethingToFile(
+      productsFileInfo.path,
+      productsFileInfo.variableName,
+      products
+    );
+  }
 
   res.send({});
 });
+
+app.post("/order", (req, res) => {
+  console.log("POST /order ESTOOOOY");
+  const file = req.file;
+  console.log("POST /orders", req.body);
+  const { body } = req;
+
+  const newIdOrder = orders.find((elem) => elem.idUser === body.idUser).orders.length + 1;
+
+  const newOrder = {
+    idOrder: newIdOrder,
+    date: body.orders.date , // Fecha actual en formato YYYY-MM-DD
+    products: body.orders.products
+  };
+
+  if (newOrder.products != null) {
+    orders.find((elem) => elem.idUser === body.idUser).orders.push(newOrder);
+    writeSomethingToFile(ordersFileInfo.path,ordersFileInfo.variableName,orders);
+    res.status(201).json({ message: "order successfully created." });
+  }
+});
+
 app.post("/login", (req, res) => {
   console.log("POST /login");
 
@@ -123,16 +171,16 @@ app.post("/register", (req, res) => {
   };
 
   users.push(newUser);
-  writeSomethingToFile( userFileInfo.path, userFileInfo.variableName, users);
+
+  writeSomethingToFile(userFileInfo.path, userFileInfo.variableName, users);
 
   console.log("Usuario registrado:", newUser);
 
   res.status(201).json({ message: "Usuario registrado exitosamente" });
 });
-
 //PATCH
 
-app.patch("/products/:id", upload.single('image'), (req, res) => {
+app.patch("/products/:id", upload.single("image"), (req, res) => {
   console.log("PATCH /EditProduct");
 
   const { id } = req.params;
@@ -148,39 +196,18 @@ app.patch("/products/:id", upload.single('image'), (req, res) => {
 
   const product = products[productIndex];
 
-
   for (const key in body) {
     product[key] = body[key];
-    console.log("key", key ,body[key]);
+    //console.log("key", key ,body[key]);
   }
 
   products[productIndex] = product;
   console.log("Despues", products[productIndex]);
-  //writeSomethingToFile( productsFileInfo.path, productsFileInfo.variableName, products);
-
-  res.status(200).json({ message: "Login successful" });
+  writeSomethingToFile( productsFileInfo.path, productsFileInfo.variableName, products);
+  res.status(200).json({ message: "Product successfully updated" });
 });
 
 //PUT
-app.put("/products/:id", (req, res) => {
-  const { id } = req.params;
-
-  console.log("PUT /products/:id", id)
-
-  const updatedProduct = req.body;
-
-  console.log("producto upd: " + updatedProduct.stock)
-
-  const productIndex = products.findIndex((elem) => elem.id === Number(id));
-
-  if (productIndex !== -1) {
-    products[productIndex] = { ...products[productIndex], ...updatedProduct };
-    res.status(200).json({ product: products[productIndex], message: "Product successfully updated." });
-  } else {
-    res.status(404).json({ message: "Product not found." });
-  }
-})
-
 
 //DELETE
 
@@ -196,7 +223,11 @@ app.delete("/products/:id", (req, res) => {
   }
 
   products.splice(productIndex, 1);
-  writeSomethingToFile( productsFileInfo.path, productsFileInfo.variableName, products);
+  writeSomethingToFile(
+    productsFileInfo.path,
+    productsFileInfo.variableName,
+    products
+  );
 
   console.log("Despues", products);
 

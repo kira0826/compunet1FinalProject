@@ -12,7 +12,8 @@ import {
   Profile,
   ProductInfo,
   Layout,
-  ProductForm
+  ProductForm,
+  OrderHistory
 } from "./pages/index.js";
 
 import "./components/fontAwesome.js";
@@ -51,6 +52,7 @@ function App() {
                 element={<ProductInfo incrementCartCount={incrementCartCount} />} 
               />
               <Route path="/productForm" element={<ProductForm incrementCartCount={incrementCartCount}/>} />
+              <Route path="/orderHistory" element = { <OrderHistory/> }/>
             </Routes>
           </Layout>
         </UserProvider>
