@@ -15,6 +15,10 @@ function Home({ incrementCartCount }) {
   const UserContext = useUser();
   const apiUrl = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_URL_PROD : process.env.REACT_APP_URL_LOCAL;
 
+  console.log("NODE_ENV," , process.env.NODE_ENV);  
+  console.log("REACT_PROD," , process.env.REACT_APP_URL_PROD);
+  console.log("REACT_LOCAL," , process.env.REACT_APP_URL_LOCAL);
+  console.log("Api final," , apiUrl);
 
   useEffect(() => {
     const fetchProducts = async () => {
