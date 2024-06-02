@@ -46,7 +46,7 @@ function Home({ incrementCartCount }) {
     <div>
       <Banner />
       <div className="container pb-16 pr-16">
-        {UserContext && user.role === "admin"  && <NewProdButton />}
+        {UserContext && UserContext.role === "admin"  && <NewProdButton />}
       </div>
       <Features />
       <div className="container pb-16">
@@ -55,11 +55,13 @@ function Home({ incrementCartCount }) {
             <p>Loading products...</p>
           ) : (
             products.map((product) => (
-              <Product
+              product.stock > 0 ? (
+                <Product
                 key={product.id}
                 product={product}
                 incrementCartCount={incrementCartCount}
               />
+              ) : null
             ))
           )}
         </div>
