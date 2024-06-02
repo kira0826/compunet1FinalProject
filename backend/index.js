@@ -1,45 +1,17 @@
 import express from "express";
 import cors from "cors";
-import path from "path";
-import { fileURLToPath } from "url";
-import PropertiesReader from "properties-reader";
-//import { products } from "./com/products.js";
-import { orders } from "./com/OrderHistorials.js";
-import writeSomethingToFile from "./com/Writer.js";
-import { users } from "./users/users.js";
 import multer from "multer";
 import { MongoClient,ServerApiVersion } from "mongodb";
+import dotenv from "dotenv";
 
-// fileURLToPath is used because we are using module ES.
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const propertiesPath = path.resolve(__dirname, "./config.properties");
+dotenv.config();
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
-//import upload from "./Storage/Storage.js";
 
+const port = process.env.PORT || 18900
 
-
-const userFileInfo = {
-  path: `./users/users.js`,
-  variableName: `users`,
-};
-const productsFileInfo = {
-  path: `./com/products.js`,
-  variableName: `products`,
-};
-
-const ordersFileInfo = {
-  path: `./com/OrderHistorials.js`,
-  variableName: `orders`,
-};
-
-const properties = PropertiesReader(propertiesPath);
-const port = process.env.PORT || properties.get("app.port");
-
-const uri = "mongodb+srv://yeisz0904:a7mVK8bGZVHcRPJz@finalprojectcluster.tsqooj9.mongodb.net/?retryWrites=true&w=majority&appName=finalProjectCluster"
+const uri = process.env.DATABASE_URL
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
