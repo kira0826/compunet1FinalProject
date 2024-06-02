@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useUser } from "../../UserContext.js";
 import InfoCell from "../general/InfoCell.js";
 
@@ -6,13 +6,27 @@ function PersonalInfo() {
   const user = useUser();
   console.log("user", user);
   const [formData, setFormData] = useState({
-    firstName: user.firstName,
-    lastname: user.lastName,
+    firstName: "",
+    lastName: "",
     city: "",
     streetAddress: "",
-    phone: user.phone,
-    email: user.email,
+    phone: "",
+    email: "",
   });
+
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        city: "",
+        streetAddress: "",
+        phone: user.phone || "",
+        email: user.email || "",
+      });
+    }
+  }, [user]);
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -36,7 +50,7 @@ function PersonalInfo() {
               name="last-name"
               id="last-name"
               className="input-box"
-              placeholder={formData.firstName}
+              placeholder={formData.firstName && formData.firstName}
               onChange={handleInputChange}
               required
             />
