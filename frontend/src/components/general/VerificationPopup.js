@@ -1,11 +1,16 @@
 import React from "react";
 
 function VerificationPopup({ message, onAccept, products }) {
+
+    let user = JSON.parse(localStorage.getItem("user"));
+    const total = products.reduce((acc, product) => acc + product.price, 0);
+
   return (
     <div className="fixed z-10 inset-0 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div className="fixed inset-0 transition-opacity">
-          <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+          <div className="absolute inset-0 bg-gray-500 opacity-75">
+          </div>
         </div>
         <span
           className="hidden sm:inline-block sm:align-middle sm:h-screen"
@@ -46,7 +51,27 @@ function VerificationPopup({ message, onAccept, products }) {
                   Verificación
                 </h3>
                 <div className="mt-2">
-                  <p className="text-sm text-gray-500">{message}</p>
+                  <p className="text-sm text-gray-500">{user.user.firstName}, {message}</p>
+                </div>
+                <div className="mt-2">
+                  <p className="text-sm text-gray-500">
+                        {
+                            products.map((product) => (
+                                <div key={product.id} className="flex justify-between border-b border-gray-200 mt-1 text-gray-800 font-medium py-3 uppercas">
+                                <p>{product.name}</p>
+                                <p>${product.price}</p>
+                                </div>
+                            ))
+                        }
+                  </p>
+                </div>
+                <div className="mt-2 flex justify-between">
+                    <p className="text-sm text-gray-500">
+                    Total compra:
+                    </p>
+                  <p className="text-sm text-gray-500">
+                        {total}
+                  </p>
                 </div>
               </div>
             </div>
