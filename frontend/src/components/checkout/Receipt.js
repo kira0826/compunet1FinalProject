@@ -1,86 +1,67 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useCheckout, useCheckoutUpdate } from "../../CheckoutContext.js";
 import { useUser } from "../../UserContext.js";
-import Popup from "../general/Popup.js";
+import VerificationPopup from "../general/VerificationPopup.js";
 
-// substractCar -> func que viene de checkout
-// para restarle cantidad al carrito cada vez
-// que quite un producto
+const buttonStyles = {
+  backgroundColor: "red",
+  color: "white",
+  border: "none",
+  padding: "5px 10px",
+  cursor: "pointer",
+};
+
 function Receipt({ substractCart }) {
   const [showPopup, setShowPopup] = useState(false);
+  const [isEmptyCart, setIsEmptyCart] = useState(false);
 
-  const handleCancelDelete = () => {
-    console.log("Cancelando popup");
-    setShowPopup(false);
-  };
-
-  const handleConfirmDelete = () => {
-    console.log("confirmar popup");
-    setShowPopup(false);
-  };
   const apiUrl =
     process.env.NODE_ENV === "production"
       ? process.env.REACT_APP_URL_PROD
       : process.env.REACT_APP_URL_LOCAL;
+
   const user = useUser();
-  const updateCheckout = useCheckoutUpdate(); // funcion updateCheckout
+  const updateCheckout = useCheckoutUpdate();
 
-  // costo de envio
-  var shipping = 0;
-
-  // obtenemos productos del checkout context
   const checkout = useCheckout();
+  const [products, setProducts] = useState([]);
 
-  // calculamos subtotal
+  useEffect(() => {
+    setProducts(checkout);
+  }, [checkout]);
+
   const subtotal = () => {
-    var sum = 0;
-
-    checkout.map((product) => {
-      sum += parseInt(product.price);
-    });
-
-    return sum;
+    return checkout.reduce((sum, product) => sum + product.price * (product.quantity || 1), 0);
   };
 
-  // calculamos total
   const total = () => {
-    return shipping + subtotal();
-  };
-
-  // Estilos para los botones
-  const buttonStyles = {
-    backgroundColor: "#fd3d57",
-    color: "white",
-    fontWeight: "bold",
-    padding: "0.2rem 0.7rem", // Hacer el botón más pequeño
-    borderRadius: "0.25rem",
-    fontSize: "0.75rem", // Tamaño de la fuente más pequeño
+    return subtotal();
   };
 
   const handleDeleteClick = (id) => {
-    updateCheckout(id, 0);
+    updateCheckout({ id }, 0);
     substractCart();
   };
 
   const handlePlaceOrderClick = async () => {
     if (user) {
       let tempProducts = checkout;
-      console.log("Productos en el carrito:", tempProducts);
       if (tempProducts.length === 0) {
+        setIsEmptyCart(true);
         setShowPopup(true);
       } else {
+        setIsEmptyCart(false);
         const orderData = {
           idUser: user.email,
           orders: {
             date: new Date().toISOString().split("T")[0],
             products: tempProducts.map((product) => ({
               idProduct: product.id,
-              quantity: 1, // Ajustar la cantidad según sea necesario
+              quantity: product.quantity,
             })),
           },
         };
-
-        console.log("Datos de la orden:", orderData);
+  
         if (tempProducts.length > 0) {
           try {
             const response = await fetch(apiUrl + "/order", {
@@ -90,24 +71,20 @@ function Receipt({ substractCart }) {
               },
               body: JSON.stringify(orderData),
             });
-
+  
             if (!response.ok) {
               throw new Error("Error al crear la orden");
             }
-
+  
             // Si la creación es exitosa, vaciar el carrito
-            //checkout.forEach((product) => substractCart());
-            console.log("Orden creada exitosamente");
+            updateCheckout([]); // Vacía el carrito aquí
           } catch (error) {
             console.error("Error al crear la orden:", error);
           }
         }
         for (const product of checkout) {
-          const updatedProduct = { ...product, stock: product.stock - 1 };
-          const changedValues = {};
-          changedValues["stock"] = updatedProduct.stock;
-          const formData = new FormData();
-          formData.append("stock", updatedProduct.stock);
+          const updatedProduct = { ...product, stock: product.stock - product.quantity };
+          const changedValues = { stock: updatedProduct.stock };
           try {
             const response = await fetch(apiUrl + "/products/" + product.id, {
               method: "PATCH",
@@ -116,11 +93,11 @@ function Receipt({ substractCart }) {
               },
               body: JSON.stringify(changedValues),
             });
-
+  
             if (!response.ok) {
               throw new Error("Error al actualizar el producto");
             }
-
+  
             // Si la actualización es exitosa, actualiza localmente el checkout
             substractCart();
             updateCheckout(product.id, updatedProduct.stock);
@@ -128,82 +105,46 @@ function Receipt({ substractCart }) {
             console.error("Error al actualizar el producto:", error);
           }
         }
+        setProducts(tempProducts);
+        setShowPopup(true);
       }
     } else {
+      setIsEmptyCart(true);
       setShowPopup(true);
     }
-  };
+  };  
 
   return (
     <div className="col-span-4 border border-gray-200 p-4 rounded">
-      <h4 className="text-gray-800 text-lg mb-4 font-medium uppercase">
-        order summary
-      </h4>
+      <h4 className="text-gray-800 text-lg mb-4 font-medium uppercase">order summary</h4>
       <div className="space-y-2">
         {checkout.map((product) => (
           <div className="flex justify-between items-center" key={product.id}>
             <div>
               <h5 className="text-gray-800 font-medium">{product.name}</h5>
-              <p className="text-sm text-gray-600">Size: {product.size}</p>
+              <p className="text-sm text-gray-600">${product.price} x {product.quantity || 1}</p>
             </div>
-            <div className="flex items-center">
-              <button
-                style={buttonStyles}
-                className="mr-2 hover:bg-transparent hover:text-primary"
-                onClick={() => handleDeleteClick(product.id)}
-              >
-                -
-              </button>
-              <p className="text-gray-800 font-medium">${product.price}</p>
-            </div>
+            <button onClick={() => handleDeleteClick(product.id)} style={buttonStyles}>Delete</button>
           </div>
         ))}
       </div>
-
-      <div className="flex justify-between border-b border-gray-200 mt-1 text-gray-800 font-medium py-3 uppercas">
-        <p>subtotal</p>
-        <p>${subtotal()}</p>
+      <div className="border-t border-gray-200 pt-4 mt-4">
+        <div className="flex justify-between items-center">
+          <h5 className="text-gray-800 font-medium">Subtotal</h5>
+          <p className="text-gray-800">${subtotal()}</p>
+        </div>
+        <div className="flex justify-between items-center">
+          <h5 className="text-gray-800 font-medium">Total</h5>
+          <p className="text-gray-800">${total()}</p>
+        </div>
       </div>
-
-      <div className="flex justify-between border-b border-gray-200 mt-1 text-gray-800 font-medium py-3 uppercas">
-        <p>shipping</p>
-        <p>Free</p>
-      </div>
-
-      <div className="flex justify-between text-gray-800 font-medium py-3 uppercas">
-        <p className="font-semibold">Total</p>
-        <p>${total()}</p>
-      </div>
-
-      <div className="flex items-center mb-4 mt-2">
-        <input
-          type="checkbox"
-          name="aggrement"
-          id="aggrement"
-          className="text-primary focus:ring-0 rounded-sm cursor-pointer w-3 h-3"
-        />
-        <label
-          htmlFor="aggrement"
-          className="text-gray-600 ml-3 cursor-pointer text-sm"
-        >
-          I agree to the{" "}
-          <a href="#" className="text-primary">
-            terms & conditions
-          </a>
-        </label>
-      </div>
-
-      <a
-        onClick={() => handlePlaceOrderClick()}
-        className="block w-full py-3 px-4 text-center text-white bg-primary border border-primary rounded-md hover:bg-transparent hover:text-primary transition font-medium"
-      >
-        Place order
-      </a>
+      <button onClick={handlePlaceOrderClick} className="w-full bg-red-600 text-white py-2 mt-4 rounded hover:bg-red-700 transition-colors">Place Order</button>
       {showPopup && (
-        <Popup
-          message="Por favor, valide que tiene una sesión activa y productos en el carrito"
-          onConfirm={handleConfirmDelete}
-          onCancel={handleCancelDelete}
+        <VerificationPopup
+          message={isEmptyCart ? "tu carrito está vacío." : "Order placed successfully."}
+          onAccept={() => setShowPopup(false)}
+          products={products}
+          isEmptyCart={isEmptyCart}
         />
       )}
     </div>

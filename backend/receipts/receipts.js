@@ -1,0 +1,5 @@
+const receipts = [
+  ];
+  
+  export { receipts };
+  

@@ -55,11 +55,13 @@ function Home({ incrementCartCount }) {
             <p>Loading products...</p>
           ) : (
             products.map((product) => (
-              <Product
+              product.stock > 0 ? (
+                <Product
                 key={product.id}
                 product={product}
                 incrementCartCount={incrementCartCount}
               />
+              ) : null
             ))
           )}
         </div>

@@ -31,8 +31,8 @@ function App() {
   // restamos al cart 1
   // pasamos por props a checkout -> receipt
   const substractCart = () => {
-    setCarCount(carCount - 1);
-  }
+    setCarCount((currentCount) => currentCount - 1);
+  };
 
   return (
     <Router basename="/compunet1FinalProject"  >
