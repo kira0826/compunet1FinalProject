@@ -16,11 +16,34 @@ export function CheckoutProvider({ children }) {
 
   // Añadimos al carrito el producto que el usuario escogió
   function updateCheckout(product, cond) {
-    if (cond === 1) {
-      setCheckout(prevCheckout => [...prevCheckout, product]);
-    } else {
-      setCheckout(prevCheckout => prevCheckout.filter(item => item.id !== product));
-    }
+    setCheckout(prevCheckout => {
+      const existingProductIndex = prevCheckout.findIndex(item => item.id === product.id);
+
+      if (cond === 1) {
+        if (existingProductIndex !== -1) {
+          return prevCheckout.map((item, index) =>
+            index === existingProductIndex
+              ? { ...item, quantity: item.quantity + 1 }
+              : item
+          );
+        } else {
+          return [...prevCheckout, { ...product, quantity: 1 }];
+        }
+      } else {
+        if (existingProductIndex !== -1) {
+          const updatedCheckout = [...prevCheckout];
+          const existingProduct = updatedCheckout[existingProductIndex];
+
+          if (existingProduct.quantity === 1) {
+            updatedCheckout.splice(existingProductIndex, 1);
+          } else {
+            updatedCheckout[existingProductIndex] = { ...existingProduct, quantity: existingProduct.quantity - 1 };
+          }
+          return updatedCheckout;
+        }
+        return prevCheckout; // Si el producto no existe, simplemente retorna el estado anterior
+      }
+    });
   }
 
   return (

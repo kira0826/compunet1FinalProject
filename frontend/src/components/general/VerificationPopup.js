@@ -2,7 +2,7 @@ import React from "react";
 
 function VerificationPopup({ message, onAccept, products, isEmptyCart }) {
   const user = JSON.parse(localStorage.getItem("user"));
-  const total = products.reduce((acc, product) => acc + product.price, 0);
+  const total = products.reduce((acc, product) => acc + product.price * product.quantity, 0);
 
   return (
     <div className="fixed z-10 inset-0 overflow-y-auto">
@@ -55,7 +55,7 @@ function VerificationPopup({ message, onAccept, products, isEmptyCart }) {
                   Verificación
                 </h3>
                 <div className="mt-2">
-                  <p className="text-sm text-gray-500">{user.user.firstName}, {message}</p>
+                  <p className="text-sm text-gray-500">{user.firstName}, {message}</p>
                 </div>
                 {!isEmptyCart && (
                   <>
@@ -67,7 +67,7 @@ function VerificationPopup({ message, onAccept, products, isEmptyCart }) {
                             className="flex justify-between border-b border-gray-200 mt-1 text-gray-800 font-medium py-3 uppercase"
                           >
                             <p>{product.name}</p>
-                            <p>${product.price}</p>
+                            <p>${product.price} x {product.quantity}</p>
                           </div>
                         ))}
                       </p>
