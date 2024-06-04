@@ -55,7 +55,7 @@ function VerificationPopup({ message, onAccept, products, isEmptyCart }) {
                   Verificación
                 </h3>
                 <div className="mt-2">
-                  <p className="text-sm text-gray-500">{user.firstName}, {message}</p>
+                  <p className="text-sm text-gray-500">{message}</p>
                 </div>
                 {!isEmptyCart && (
                   <>

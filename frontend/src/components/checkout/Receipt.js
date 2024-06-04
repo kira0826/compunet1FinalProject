@@ -141,7 +141,7 @@ function Receipt({ substractCart }) {
       <button onClick={handlePlaceOrderClick} className="w-full bg-red-600 text-white py-2 mt-4 rounded hover:bg-red-700 transition-colors">Place Order</button>
       {showPopup && (
         <VerificationPopup
-          message={isEmptyCart ? "tu carrito está vacío." : "Order placed successfully."}
+          message={isEmptyCart ? "Tu carrito está vacío." : "Pedido realizado con éxito."}
           onAccept={() => setShowPopup(false)}
           products={products}
           isEmptyCart={isEmptyCart}
